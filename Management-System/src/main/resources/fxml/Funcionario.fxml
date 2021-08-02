@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="anchorpane" prefHeight="522.0" prefWidth="933.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FuncionarioController">
+   <children>
+      <Label alignment="CENTER" layoutY="-2.0" prefHeight="48.0" prefWidth="768.0" text="Cadastro de Funcionário" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
+         <font>
+            <Font name="Segoe UI" size="34.0" />
+         </font>
+      </Label>
+    <AnchorPane layoutY="99.0" minHeight="0.0" minWidth="0.0" prefHeight="428.0" prefWidth="768.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <TableView fx:id="tblfuncionario" layoutX="1.0" prefHeight="522.0" prefWidth="933.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+              <columns>
+                <TableColumn fx:id="colNome" prefWidth="75.0" text="Nome" />
+                <TableColumn fx:id="colUsuario" prefWidth="75.0" text="Usuario" />
+                  <TableColumn fx:id="colNivel" prefWidth="106.0" text="Nivel acesso" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Label layoutX="14.0" layoutY="406.0" text="Buscar:" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="716.0" />
+            <TextField fx:id="txtPesquisa" layoutX="60.0" layoutY="402.0" prefHeight="25.0" prefWidth="842.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="-134.0" />
+         </children>
+      </AnchorPane>
+      <ButtonBar layoutX="257.0" layoutY="46.0" prefHeight="49.0" prefWidth="454.0" AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="222.0" AnchorPane.topAnchor="46.0">
+        <buttons>
+            <Button mnemonicParsing="false" onAction="#adicionar" prefHeight="25.0" prefWidth="141.0" styleClass="botaoAdd" stylesheets="@../styles/Styles.css" text="Adicionar" />
+            <Button mnemonicParsing="false" onAction="#editar" prefHeight="25.0" styleClass="botaoEdit" stylesheets="@../styles/Styles.css" text="Editar" />
+          <Button mnemonicParsing="false" onAction="#remover" prefHeight="25.0" prefWidth="97.0" styleClass="botaoExcluir" stylesheets="@../styles/Styles.css" text="Remover" />
+        </buttons>
+      </ButtonBar>
+   </children>
+</AnchorPane>

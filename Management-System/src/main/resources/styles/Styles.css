@@ -1,0 +1,29 @@
+.button {
+    -fx-font-weight: bold;
+}
+
+.backgroundLogin{    
+    -fx-background-image: url("../images/background/full-background-20.png");    
+}
+
+
+.botaoLogin{    
+    /**-fx-background-color: green;*/
+    -fx-graphic: url("../images/reload.png");    
+}
+
+
+.botaoAdd{    
+    /**-fx-background-color: green;*/
+    -fx-graphic: url("../images/cadNovo.png");    
+}
+
+.botaoEdit{    
+    /**-fx-background-color: green;*/
+    -fx-graphic: url("../images/cadEdit.png");    
+}
+
+.botaoExcluir{    
+    /**-fx-background-color: green;*/
+    -fx-graphic: url("../images/cadDelete.png");    
+}

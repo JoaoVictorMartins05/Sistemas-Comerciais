@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.13.0.final using JasperReports Library version 6.13.0-46ada4d1be8f3c5985fd0b6146f3ed44caed6f05  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioPDF" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1a8991a0-b565-4b47-b814-01bf8ce487df">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="bdComercial"/>
+	<queryString language="SQL">
+		<![CDATA[select nomeMaterial, unidade, valor from material]]>
+	</queryString>
+	<field name="nomeMaterial" class="java.lang.Object">
+		<property name="com.jaspersoft.studio.field.label" value="nomeMaterial"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="material"/>
+	</field>
+	<field name="unidade" class="java.lang.Object">
+		<property name="com.jaspersoft.studio.field.label" value="unidade"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="material"/>
+	</field>
+	<field name="valor" class="java.lang.Object">
+		<property name="com.jaspersoft.studio.field.label" value="valor"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="material"/>
+	</field>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{nomeMaterial}]]></groupExpression>
+		<groupHeader>
+			<band height="33">
+				<textField>
+					<reportElement mode="Transparent" x="-10" y="0" width="250" height="32" forecolor="#006699" backcolor="#E6E6E6" uuid="37827055-c7ca-4d04-bfb1-ed05f12d31d0"/>
+					<textElement>
+						<font size="24" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomeMaterial}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="-20" y="32" width="595" height="1" forecolor="#666666" uuid="720a061e-fe9f-4c2d-9454-a9a0c5ce40ef"/>
+				</line>
+				<textField>
+					<reportElement x="240" y="0" width="184" height="32" forecolor="#006699" uuid="0e635ecf-3162-4718-9a44-76a209afe770"/>
+					<textElement>
+						<font size="22" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{unidade}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="424" y="0" width="151" height="32" forecolor="#006699" uuid="b7cfbcc0-f7be-4864-973b-1d22e0f2eeef"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[$F{unidade}]]></groupExpression>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="Group3">
+		<groupExpression><![CDATA[$F{valor}]]></groupExpression>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="b30a88b2-a4d8-4b81-b9e1-c1394acafd82"/>
+				<staticText>
+					<reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="dd05ac36-38a1-402b-9d19-a09599e967e5"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Materiais]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="290" y="43" width="290" height="20" forecolor="#FFFFFF" uuid="7278a1f8-94d3-4c56-966f-098747e6b9bd"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Vendinha do if, iogurte 2 conto]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="26">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="5c2d0acb-b04f-4f80-8711-9fcbe31e7e41"/>
+			</line>
+			<staticText>
+				<reportElement mode="Transparent" x="-11" y="-6" width="111" height="32" forecolor="#666666" backcolor="#E6E6E6" uuid="f800662a-a68a-4b47-a548-2de1a1add6de"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[nomeMaterial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="-6" width="110" height="29" forecolor="#666666" uuid="3ae18151-5bd6-415c-b024-e3369681cc93"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[unidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="449" y="-2" width="100" height="20" forecolor="#666666" uuid="a9f477b1-748f-40e8-b722-baff1da8dfe6"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[valor]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="cd418e49-4edb-4063-81af-2c6f967b66e0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="be061afe-c409-44f0-b402-b439f7fb24d7"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="0c9d5513-d6ea-4546-9e60-30e5a1340d9e"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
