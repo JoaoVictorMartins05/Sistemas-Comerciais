@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="313.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovoMaterialController">
+<AnchorPane id="AnchorPane" prefHeight="313.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovoMaterialController">
    <children>
       <Label layoutX="34.0" layoutY="15.0" text="Adicionar Material">
          <font>
@@ -23,6 +23,6 @@
       <TextField fx:id="edtDescricao" layoutX="136.0" layoutY="219.0" prefHeight="26.0" prefWidth="227.0" />
       <Button layoutX="271.0" layoutY="276.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
       <Button layoutX="160.0" layoutY="276.0" mnemonicParsing="false" onAction="#confirmar" text="Confirmar" />
-      <ComboBox fx:id="edtUnidade" layoutX="134.0" layoutY="118.0" prefHeight="26.0" prefWidth="227.0" />
+      <ComboBox fx:id="edtUnidadeMedida" layoutX="134.0" layoutY="118.0" prefHeight="26.0" prefWidth="227.0" />
    </children>
 </AnchorPane>
