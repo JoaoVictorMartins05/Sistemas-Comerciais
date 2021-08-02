@@ -70,7 +70,7 @@ public class MaterialController implements Initializable {
     @FXML
     private Label lblId;
 
-    private List<Material> material;
+    private List<Material> materiais;
     private ObservableList<Material> obsMateriais;
 
     EntityManagerFactory emf;
@@ -81,16 +81,16 @@ public class MaterialController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.setMaterial(new ArrayList<>());
+        this.setMateriais(new ArrayList<>());
         emf = Persistence.createEntityManagerFactory("venda");
         em = emf.createEntityManager();
 
         this.tblMaterial.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> this.detallhar(newValue));
+                (observable, oldValue, newValue) -> this.detalhar(newValue));
        
-        this.setMaterial(this.listar());
+        this.setMateriais(this.listar());
 
-        this.atualizarTabela(this.getMaterial());
+        this.atualizarTabela(this.getMateriais());
 
         this.tblMaterial.getSelectionModel().selectFirst();
     }
@@ -149,7 +149,7 @@ public class MaterialController implements Initializable {
         }
     }
 
-    private void detallhar(Material material) {
+    private void detalhar(Material material) {
         if (material != null) {
             this.lblId.setText(String.valueOf(material.getId()));
             this.lblNome.setText(material.getNome());
@@ -201,23 +201,23 @@ public class MaterialController implements Initializable {
         this.tblColumCodigo.setCellValueFactory(new PropertyValueFactory<Material, String>("id"));
 
         //Criar um observableCollection com os dados advindos do BD
-        this.setMaterial(material);
-        this.obsMateriais = FXCollections.observableArrayList(this.getMaterial());
+        this.setMateriais(material);
+        this.obsMateriais = FXCollections.observableArrayList(this.getMateriais());
         this.tblMaterial.setItems(obsMateriais);
     }
 
     /**
-     * @return the material
+     * @return the materiais
      */
-    public List<Material> getMaterial() {
-        return material;
+    public List<Material> getMateriais() {
+        return materiais;
     }
 
     /**
-     * @param material the material to set
+     * @param materiais the materiais to set
      */
-    public void setMaterial(List<Material> material) {
-        this.material = material;
+    public void setMateriais(List<Material> materiais) {
+        this.materiais = materiais;
     }
 
 }

@@ -47,7 +47,7 @@ public class MainController implements Initializable {
 
     private Funcionario funcionario;
 
-    public  Stage getStage() {
+    public Stage getStage() {
         return stage;
     }
 
@@ -57,7 +57,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+
     }
 
     public void cadastrarProduto() {
@@ -111,8 +111,13 @@ public class MainController implements Initializable {
     public void mostrarTela(String frame) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(this.getClass().getResource(frame));
-        AnchorPane a = (AnchorPane) loader.load();        
-
+        AnchorPane a = (AnchorPane) loader.load();
+        
+        if (frame.equals("/fxml/estoque.fxml")) {
+            EstoqueController controller = loader.getController();
+            controller.setFuncionarioLogado(this.getFuncionario());
+        }
+        
         this.anchorpane.setCenter(a);
     }
 
