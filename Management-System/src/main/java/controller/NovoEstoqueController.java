@@ -65,6 +65,11 @@ public class NovoEstoqueController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.confirmar = false;
+        
+    }
+    
+    public void init(Funcionario funcionario){
+        this.setFuncionarioLogado(funcionario);
         this.preencheChoiceBox();
     }
 
@@ -108,9 +113,10 @@ public class NovoEstoqueController implements Initializable {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("venda");
         EntityManager em = emf.createEntityManager();
 
+        System.out.println();
+        
         em.getTransaction().begin();
-        Query consulta = em.createNativeQuery("SELECT * from material WHERE material.id = (SELECT idMaterial"
-                + "FROM Estoque AS C JOIN setor AS P ON C.idSetor = " + this.getFuncionarioLogado().getSetor().getId(), Material.class);
+        Query consulta = em.createNativeQuery("SELECT * from material WHERE material.id = (SELECT idMaterial FROM Estoque JOIN setor ON Estoque.idSetor = " + this.getFuncionarioLogado().getSetor().getId() +")", Material.class);
 
         List<Material> materiais = consulta.getResultList();
 

@@ -50,7 +50,7 @@ public class EstoqueController implements Initializable {
     private TableColumn<Estoque, String> tblColumCodigo;
 
     @FXML
-    private TableColumn<Estoque, String> tblColumNome;
+    private TableColumn<Estoque, String> tblColumQtd;
 
     @FXML
     private TextField edtBusca;
@@ -129,7 +129,7 @@ public class EstoqueController implements Initializable {
     }
 
     private void atualizarTabela(List<Estoque> estoques) {
-        this.tblColumNome.setCellValueFactory(new PropertyValueFactory<Estoque, String>("nome"));
+        this.tblColumQtd.setCellValueFactory(new PropertyValueFactory<Estoque, String>("quantidade"));
         this.tblColumCodigo.setCellValueFactory(new PropertyValueFactory<Estoque, String>("id"));
 
         this.setEstoques(estoques);
@@ -151,7 +151,8 @@ public class EstoqueController implements Initializable {
             NovoEstoqueController controller = loader.getController();
             controller.setEstoque(estoque);
             controller.setStage(stage);
-            controller.setFuncionarioLogado(this.getFuncionarioLogado());
+            controller.init(this.getFuncionarioLogado());
+            //controller.setFuncionarioLogado(this.getFuncionarioLogado());
 
             stage.showAndWait();
 
@@ -182,12 +183,52 @@ public class EstoqueController implements Initializable {
 
     @FXML
     void editar(ActionEvent event) {
-
+        
+        setEmf(Persistence.createEntityManagerFactory("venda"));
+        setEm(getEmf().createEntityManager()); 
+        
+        Estoque estoque = this.tblEstoque.getSelectionModel().getSelectedItem();
+        
+        if (estoque != null) {
+            if (this.mostrarTelaNovoEstoque(estoque)) {
+                em.getTransaction().begin();
+                em.merge(estoque);
+                em.getTransaction().commit();
+                emf.close();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Estoque atualizado com sucesso");
+                alert.show();
+                this.atualizarTabela(this.listar());
+                this.tblEstoque.refresh();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhun Material selecionado");
+            alert.show();
+        }
     }
 
+   
     @FXML
     void remover(ActionEvent event) {
+       
+        setEmf(Persistence.createEntityManagerFactory("venda"));
+        setEm(getEmf().createEntityManager());
+        
+        Estoque estoque = this.tblEstoque.getSelectionModel().getSelectedItem();
+        
+        if (estoque != null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Deseja realmente excluir o material " + estoque.getMaterial().getNome());
+            alert.showAndWait();
 
+            if (alert.getResult().getText().equals("OK")) {
+                em.remove(em.find(Estoque.class, estoque.getId()));
+                em.close();
+                this.atualizarTabela(this.listar());
+                this.tblEstoque.getSelectionModel().selectFirst();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhum Material Selecionado");
+            alert.show();
+        }
     }
 
     /**
@@ -222,14 +263,14 @@ public class EstoqueController implements Initializable {
      * @return the tblColumNome
      */
     public TableColumn<Estoque, String> getTblColumNome() {
-        return tblColumNome;
+        return tblColumQtd;
     }
 
     /**
      * @param tblColumNome the tblColumNome to set
      */
     public void setTblColumNome(TableColumn<Estoque, String> tblColumNome) {
-        this.tblColumNome = tblColumNome;
+        this.tblColumQtd = tblColumNome;
     }
 
     /**

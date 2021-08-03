@@ -55,11 +55,12 @@
             <artifactId>lib</artifactId>
             <version>0.9.0</version>   
         </dependency>
-        <dependency>   
+ <!--      <dependency>   
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>6.7.1</version>
         </dependency>
+                -->
     </dependencies>
 
     <build>
