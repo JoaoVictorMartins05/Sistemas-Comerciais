@@ -84,18 +84,22 @@ public class EstoqueController implements Initializable {
     /**
      * Initializes the controller class.
      */
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.setEstoques(new ArrayList<>());
 
         this.getTblEstoque().getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> this.detalhar(newValue.getMaterial()));
+                (observable, oldValue, newValue) -> this.detalhar(newValue.getMaterial()));     
 
+        this.getTblEstoque().getSelectionModel().selectFirst();
+    }
+    
+    public void init(Funcionario funcionario) {
+        this.setFuncionarioLogado(funcionario);
         this.setEstoques(this.listar());
 
         this.atualizarTabela(this.getEstoques());
-
-        this.getTblEstoque().getSelectionModel().selectFirst();
     }
 
     private void detalhar(Material material) {
@@ -111,9 +115,11 @@ public class EstoqueController implements Initializable {
     public List<Estoque> listar() {
         setEmf(Persistence.createEntityManagerFactory("venda"));
         setEm(getEmf().createEntityManager());
+        
+        System.out.println("\n\n\n"+this.getFuncionarioLogado().getNome()+"\n\n\n");
 
         em.getTransaction().begin();
-        Query consulta = em.createQuery("SELECT * FROM Estoque WHERE Estoque.idSetor = " + this.getFuncionarioLogado().getSetor().getId());
+        Query consulta = em.createNativeQuery("SELECT * FROM Estoque WHERE Estoque.idSetor = " + this.getFuncionarioLogado().getSetor().getId(), Estoque.class);
         List<Estoque> estoques = consulta.getResultList();
 
         em.getTransaction().commit();
@@ -143,14 +149,13 @@ public class EstoqueController implements Initializable {
             stage.setScene(scene);
 
             NovoEstoqueController controller = loader.getController();
-//            controller.setEstoque(estoque);
-//            controller.setStage(stage);
-//            controller.preencheCampos();
+            controller.setEstoque(estoque);
+            controller.setStage(stage);
+            controller.setFuncionarioLogado(this.getFuncionarioLogado());
 
             stage.showAndWait();
 
-            //return controller.isConfirmar();
-            return true;
+            return controller.isConfirmar();
         } catch (IOException ex) {
             Logger.getLogger(FuncionarioController.class.getName()).log(Level.SEVERE, null, ex);
             return false;

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -107,6 +108,14 @@ public class MainController implements Initializable {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void estoque() {
+        try {
+            this.mostrarTela("/fxml/estoque.fxml");
+        } catch (IOException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public void mostrarTela(String frame) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -115,7 +124,8 @@ public class MainController implements Initializable {
         
         if (frame.equals("/fxml/estoque.fxml")) {
             EstoqueController controller = loader.getController();
-            controller.setFuncionarioLogado(this.getFuncionario());
+            
+            controller.init(this.getFuncionario());
         }
         
         this.anchorpane.setCenter(a);

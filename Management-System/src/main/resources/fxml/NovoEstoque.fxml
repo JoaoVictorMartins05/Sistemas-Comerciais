@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="344.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovoMaterialController">
+<AnchorPane id="AnchorPane" prefHeight="344.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovoMaterialController">
    <children>
       <Label layoutX="136.0" layoutY="14.0" prefHeight="27.0" prefWidth="146.0" style="-fx-text-alignment: center;" text="Adicionar Material" textAlignment="CENTER" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="135.0">
          <font>
@@ -38,10 +38,10 @@
             <Label text="Valor" GridPane.rowIndex="3" />
             <Label text="Descricao" GridPane.rowIndex="4" />
             <Label text="Nome" />
-            <ComboBox fx:id="edtNome" prefHeight="26.0" prefWidth="170.0" GridPane.columnIndex="1" />
+            <ComboBox fx:id="edtNome" onAction="#detalhar" prefHeight="26.0" prefWidth="170.0" GridPane.columnIndex="1" />
             <Label fx:id="lblValor" text="valor" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label fx:id="lblDescricao" text="askaksaksakska" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="145.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="edtQuantidade" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="145.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </children>
