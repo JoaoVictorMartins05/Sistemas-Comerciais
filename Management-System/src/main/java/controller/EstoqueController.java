@@ -84,22 +84,21 @@ public class EstoqueController implements Initializable {
     /**
      * Initializes the controller class.
      */
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.setEstoques(new ArrayList<>());
 
         this.getTblEstoque().getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> this.detalhar(newValue.getMaterial()));     
+                (observable, oldValue, newValue) -> this.detalhar(newValue.getMaterial()));
 
         this.getTblEstoque().getSelectionModel().selectFirst();
     }
-    
+
     public void init(Funcionario funcionario) {
         this.setFuncionarioLogado(funcionario);
         this.setEstoques(this.listar());
 
-        this.atualizarTabela(this.getEstoques());
+        this.atualizarTabela();
     }
 
     private void detalhar(Material material) {
@@ -115,8 +114,8 @@ public class EstoqueController implements Initializable {
     public List<Estoque> listar() {
         setEmf(Persistence.createEntityManagerFactory("venda"));
         setEm(getEmf().createEntityManager());
-        
-        System.out.println("\n\n\n"+this.getFuncionarioLogado().getNome()+"\n\n\n");
+
+        System.out.println("\n\n\n" + this.getFuncionarioLogado().getNome() + "\n\n\n");
 
         em.getTransaction().begin();
         Query consulta = em.createNativeQuery("SELECT * FROM Estoque WHERE Estoque.idSetor = " + this.getFuncionarioLogado().getSetor().getId(), Estoque.class);
@@ -128,15 +127,15 @@ public class EstoqueController implements Initializable {
         return estoques;
     }
 
-    private void atualizarTabela(List<Estoque> estoques) {
+    private void atualizarTabela() {
         this.tblColumQtd.setCellValueFactory(new PropertyValueFactory<Estoque, String>("quantidade"));
         this.tblColumCodigo.setCellValueFactory(new PropertyValueFactory<Estoque, String>("id"));
 
-        this.setEstoques(estoques);
-        this.obsEstoques = FXCollections.observableArrayList(this.getEstoques());
+        this.obsEstoques = FXCollections.observableArrayList(this.estoques);
         this.tblEstoque.setItems(obsEstoques);
+        //this.tblEstoque.getSelectionModel().select(0);
     }
-    
+
     private boolean mostrarTelaNovoEstoque(Estoque estoque) {
         try {
             Stage stage = new Stage();
@@ -165,69 +164,51 @@ public class EstoqueController implements Initializable {
 
     @FXML
     void adicionar(ActionEvent event) {
-        setEmf(Persistence.createEntityManagerFactory("venda"));
-        setEm(getEmf().createEntityManager());
-        
+        this.editar(true);
+    }
+
+    @FXML
+    void remover(ActionEvent event) {
+        this.editar(false);
+    }
+    
+    private void editar(boolean flag) {
         Estoque estoque = new Estoque();
+        
+        if (this.tblEstoque.getSelectionModel().getSelectedItem() != null) {
+             estoque = this.tblEstoque.getSelectionModel().getSelectedItem();
+        }        
+
         if (this.mostrarTelaNovoEstoque(estoque)) {
-            //funcionario.setSetor(this.getFuncionario().getSetor());
+
+            List<Estoque> estoques = this.listar();
+            for (Estoque e : estoques) {
+                if (estoque.getMaterial().getId().equals(e.getMaterial().getId())) {
+                    double qtd = estoque.getQuantidade();
+                    estoque = e;
+                    if(flag) {
+                        estoque.setQuantidade(estoque.getQuantidade() + qtd);
+                    }else {
+                        estoque.setQuantidade(estoque.getQuantidade() - qtd);
+                    }
+                }
+            }
+            setEmf(Persistence.createEntityManagerFactory("venda"));
+            setEm(getEmf().createEntityManager());
+
             em.getTransaction().begin();
             em.merge(estoque);
             em.getTransaction().commit();
             emf.close();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Material adicionado ao estoque com sucesso");
             alert.show();
-            this.atualizarTabela(this.listar());
-        }
-    }
-
-    @FXML
-    void editar(ActionEvent event) {
-        
-        setEmf(Persistence.createEntityManagerFactory("venda"));
-        setEm(getEmf().createEntityManager()); 
-        
-        Estoque estoque = this.tblEstoque.getSelectionModel().getSelectedItem();
-        
-        if (estoque != null) {
-            if (this.mostrarTelaNovoEstoque(estoque)) {
-                em.getTransaction().begin();
-                em.merge(estoque);
-                em.getTransaction().commit();
-                emf.close();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Estoque atualizado com sucesso");
-                alert.show();
-                this.atualizarTabela(this.listar());
-                this.tblEstoque.refresh();
+            
+            this.setEstoques(this.listar());
+            
+            for( Estoque e : this.estoques) {
+                System.out.println(e.getMaterial().getNome());
             }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhun Material selecionado");
-            alert.show();
-        }
-    }
-
-   
-    @FXML
-    void remover(ActionEvent event) {
-       
-        setEmf(Persistence.createEntityManagerFactory("venda"));
-        setEm(getEmf().createEntityManager());
-        
-        Estoque estoque = this.tblEstoque.getSelectionModel().getSelectedItem();
-        
-        if (estoque != null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Deseja realmente excluir o material " + estoque.getMaterial().getNome());
-            alert.showAndWait();
-
-            if (alert.getResult().getText().equals("OK")) {
-                em.remove(em.find(Estoque.class, estoque.getId()));
-                em.close();
-                this.atualizarTabela(this.listar());
-                this.tblEstoque.getSelectionModel().selectFirst();
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhum Material Selecionado");
-            alert.show();
+            this.atualizarTabela();
         }
     }
 

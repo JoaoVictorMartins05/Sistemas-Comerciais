@@ -43,7 +43,7 @@ public class Estoque {
 
 
     public Estoque() {
-        
+        this.id = -1L;
     }
 
     public Estoque(Setor setor, Material material, double quantidade) {

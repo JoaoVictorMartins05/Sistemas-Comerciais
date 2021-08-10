@@ -1,71 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="522.0" prefWidth="933.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controller.VendaController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1131.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VendaController">
    <children>
-      <Label layoutX="3.0" layoutY="14.0" text="Descrição" />
-      <TextField layoutX="5.0" layoutY="32.0" prefHeight="37.0" prefWidth="684.0" />
-      <Label layoutX="3.0" layoutY="86.0" text="Quanitdade" textAlignment="JUSTIFY" />
-      <TextField layoutX="2.0" layoutY="109.0" prefHeight="43.0" prefWidth="220.0" />
-      <Label layoutX="225.0" layoutY="86.0" text="Valor Unitário R$" />
-      <TextField layoutX="225.0" layoutY="109.0" prefHeight="43.0" prefWidth="196.0" />
-      <Label layoutX="3.0" layoutY="339.0" text="Código  Produto" />
-      <TextField layoutX="3.0" layoutY="357.0" prefHeight="37.0" prefWidth="252.0" />
-      <Label layoutX="259.0" layoutY="339.0" text="Quantidade em Estoque" />
-      <TextField layoutX="259.0" layoutY="357.0" prefHeight="37.0" prefWidth="161.0" />
-      <Label layoutX="3.0" layoutY="405.0" text="Cliente" />
-      <Label layoutX="9.0" layoutY="470.0" text="Forma  Pgto." />
-      <GridPane layoutX="439.0" layoutY="391.0" prefHeight="83.0" prefWidth="491.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="412.0" minWidth="10.0" prefWidth="412.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="271.0" minWidth="10.0" prefWidth="79.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="16.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="35.0" minHeight="0.0" prefHeight="19.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="36.0" minHeight="6.0" prefHeight="17.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label text="Quantidade de intens" />
-            <Label text="Valor do acréscimo" GridPane.rowIndex="1" />
-            <Label text="Valor do desconto" GridPane.rowIndex="2" />
-            <Label text="Valor Total" GridPane.rowIndex="3" />
-            <Label text="0" GridPane.columnIndex="1" />
-            <Label text="0.00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="0.00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="0.00" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-         </children>
-      </GridPane>
-      <ButtonBar layoutX="433.0" layoutY="468.0" prefHeight="53.0" prefWidth="469.0">
-        <buttons>
-          <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="154.0" text="CANCELAR VENDA" />
-            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="89.0" text="EXCUIR ITEM" />
-            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="162.0" text="FINALIZAR VENDA" />
-        </buttons>
-      </ButtonBar>
-      <ComboBox layoutX="3.0" layoutY="488.0" prefHeight="28.0" prefWidth="419.0" />
-      <ComboBox layoutX="3.0" layoutY="423.0" prefHeight="28.0" prefWidth="419.0" />
-      <TableView layoutX="433.0" layoutY="86.0" prefHeight="300.0" prefWidth="498.0">
-        <columns>
-          <TableColumn prefWidth="94.0" text="Código" />
-          <TableColumn prefWidth="216.0" text="Descrição" />
-            <TableColumn prefWidth="56.0" text="Qtde." />
-            <TableColumn prefWidth="65.0" text="Valor" />
-            <TableColumn minWidth="0.0" prefWidth="63.0" text="Total" />
-        </columns>
+      <TableView fx:id="tblVenda" layoutY="229.0" prefHeight="346.0" prefWidth="1131.0" style="-fx-background-color: #deea94;" AnchorPane.bottomAnchor="185.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="229.0">
+         <columns>
+            <TableColumn fx:id="tblColumnCodigo" prefWidth="165.0" text="Código" />
+            <TableColumn fx:id="tblColumnDescricao" prefWidth="362.0" text="Descrição" />
+            <TableColumn fx:id="tblColumnQuantidade" prefWidth="112.0" text="Qtde." />
+            <TableColumn fx:id="tblColumnValor" prefWidth="110.0" text="Valor" />
+            <TableColumn fx:id="tblColumnTotal" minWidth="0.0" prefWidth="255.0" text="Total" />
+         </columns>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </TableView>
+      <Text layoutX="14.0" layoutY="599.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantidade de Itens: " AnchorPane.leftAnchor="14.0">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Text>
+      <Line endX="1020.0" fill="#b90000" layoutX="111.0" layoutY="691.0" startX="-105.0" stroke="#04320d" AnchorPane.bottomAnchor="68.5" AnchorPane.leftAnchor="5.5" AnchorPane.rightAnchor="-11.5" AnchorPane.topAnchor="690.5" />
+      <Text fill="#e10202" fontSmoothingType="LCD" layoutX="182.0" layoutY="598.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="25.625">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Text>
+      <Button fx:id="btnCancelar" layoutX="635.0" layoutY="575.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="45.0" prefWidth="145.0" text="CANCELAR VENDA" textFill="#f80000" AnchorPane.bottomAnchor="12.0">
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../../../../../../../projeto-javai-master/projetoVenda2020/src/main/resources/images/cadCancel.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button layoutX="821.0" layoutY="575.0" mnemonicParsing="false" onAction="#excluir" prefHeight="45.0" prefWidth="125.0" text="EXCLUIR ITEM" textFill="#70751d" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="211.0">
+         <graphic>
+            <ImageView fx:id="btnExcluir" nodeOrientation="RIGHT_TO_LEFT">
+               <image>
+                  <Image url="@../../../../../../../projeto-javai-master/projetoVenda2020/src/main/resources/images/cadDelete.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btnFinalisar" layoutX="938.0" layoutY="575.0" mnemonicParsing="false" onAction="#finalizar" prefHeight="45.0" prefWidth="162.0" text="FINALIZAR VENDA" textFill="#2f8026" AnchorPane.bottomAnchor="12.0">
+         <graphic>
+            <ImageView fitHeight="25.0" fitWidth="25.0">
+               <image>
+                  <Image url="@../../../../../../../pngtree-check-mark-icon-png-image_3566317.jpg" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Text fill="#e80505" layoutX="454.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" text="Venda Iniciada" AnchorPane.bottomAnchor="588.0" AnchorPane.leftAnchor="454.0" AnchorPane.rightAnchor="432.09326171875" AnchorPane.topAnchor="7.0">
+         <font>
+            <Font name="System Bold" size="35.0" />
+         </font>
+      </Text>
+      <Line endX="1030.5" layoutX="107.0" layoutY="61.0" startX="-100.0" stroke="#042504" AnchorPane.bottomAnchor="581.5" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="57.5" />
+      <Pane layoutX="7.0" layoutY="80.0" prefHeight="149.0" prefWidth="1131.0" style="-fx-background-color: #99e599;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Pane layoutX="1003.0">
+               <children>
+                  <ImageView fitHeight="149.0" fitWidth="145.0" layoutX="-17.0">
+                     <image>
+                        <Image url="@../../../../../../../logo-if.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Label layoutX="26.0" layoutY="8.0" text="Código  Produto">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="edtCodProduto" layoutX="26.0" layoutY="30.0" prefHeight="37.0" prefWidth="252.0" style="-fx-background-color: #deea94;" text="000000000001">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </TextField>
+            <Label layoutX="667.0" layoutY="8.0" text="Cliente">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="791.0" layoutY="69.0" text="Forma  Pgto.">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="edtFormaPagamento" layoutX="791.0" layoutY="92.0" prefHeight="28.0" prefWidth="161.0" />
+            <ComboBox fx:id="edtCliente" layoutX="667.0" layoutY="27.0" prefHeight="28.0" prefWidth="285.0" />
+            <Label layoutX="342.0" layoutY="8.0" text="Quantidade" textAlignment="JUSTIFY">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="edtQuantidade" layoutX="342.0" layoutY="28.0" prefHeight="43.0" prefWidth="145.0" text="1">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="edtDescricao" layoutX="26.0" layoutY="88.0" prefHeight="49.0" prefWidth="706.0" text="Suco de Laranja   -  Litro - R$ 5,00">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </TextField>
+            <Text layoutX="26.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <ImageView layoutX="254.0" layoutY="42.0">
+               <image>
+                  <Image url="@../../../../../../../projeto-javai-master/projetoVenda2020/src/main/resources/images/search.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="823.0" layoutY="581.0" prefHeight="105.0" prefWidth="305.0" style="-fx-background-color: #99e599;">
+         <children>
+            <Text layoutX="4.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total R$:">
+               <font>
+                  <Font name="System Bold" size="33.0" />
+               </font>
+            </Text>
+            <Text fx:id="lblTotal" fill="#f80505" layoutX="153.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0000,00" wrappingWidth="145.0">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Text fx:id="lblData" layoutX="6.0" layoutY="686.0" strokeType="OUTSIDE" strokeWidth="0.0" text="30/07/2021 - 13:09">
+         <font>
+            <Font name="System Italic" size="18.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

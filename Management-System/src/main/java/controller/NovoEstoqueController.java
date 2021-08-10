@@ -65,10 +65,10 @@ public class NovoEstoqueController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.confirmar = false;
-        
+
     }
-    
-    public void init(Funcionario funcionario){
+
+    public void init(Funcionario funcionario) {
         this.setFuncionarioLogado(funcionario);
         this.preencheChoiceBox();
     }
@@ -114,9 +114,9 @@ public class NovoEstoqueController implements Initializable {
         EntityManager em = emf.createEntityManager();
 
         System.out.println();
-        
+
         em.getTransaction().begin();
-        Query consulta = em.createNativeQuery("SELECT * from material WHERE material.id = (SELECT idMaterial FROM Estoque JOIN setor ON Estoque.idSetor = " + this.getFuncionarioLogado().getSetor().getId() +")", Material.class);
+        Query consulta = em.createNativeQuery("SELECT * from material WHERE material.id = (SELECT DISTINCT idMaterial FROM Estoque JOIN setor ON Estoque.idSetor = " + this.getFuncionarioLogado().getSetor().getId() + ")", Material.class);
 
         List<Material> materiais = consulta.getResultList();
 
@@ -134,14 +134,22 @@ public class NovoEstoqueController implements Initializable {
     }
 
     private void preencheChoiceBox() {
-        ObservableList<Material> obsMateriais = FXCollections.observableArrayList(this.listarMateriais());
+        ObservableList<Material> obsMateriais = FXCollections.observableArrayList(new MaterialController().listar());
 
         this.edtNome.setItems(obsMateriais);
 
         this.mostrarSoNomeMaterial();
 
-        this.edtNome.setValue(this.edtNome.getItems().get(0));
-        
+        if (this.estoque.getId() == -1L) {
+            this.edtNome.setValue(this.getEdtNome().getItems().get(0));
+        } else {
+            for (Material item : this.edtNome.getItems()) {
+                if (item.getId().equals(this.estoque.getMaterial().getId())) {
+                    this.edtNome.setValue(item);
+                }
+            }
+        }
+
         this.detalhar(null);
     }
 

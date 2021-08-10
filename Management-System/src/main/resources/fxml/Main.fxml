@@ -18,9 +18,11 @@
                   <MenuItem fx:id="menuItemCadatroFuncionario" mnemonicParsing="false" onAction="#cadastrarFuncionario" text="Funcionários" />
             </items>
           </Menu>
-            <Menu fx:id="btnEstoque" mnemonicParsing="false" text="Estoque">
+            <Menu fx:id="btnEstoque" mnemonicParsing="false" text="Ver">
                <items>
                   <MenuItem fx:id="menuEstoque" mnemonicParsing="false" onAction="#estoque" text="Estoque" />
+                  <MenuItem fx:id="menuVenda" mnemonicParsing="false" onAction="#estoque" text="Vendas" />
+                  <MenuItem fx:id="menuTransferencia" mnemonicParsing="false" onAction="#estoque" text="Tranferencias" />
                </items></Menu>
           <Menu mnemonicParsing="false" text="Operações">
             <items>

@@ -135,7 +135,7 @@ public class LoginController implements Initializable {
             controller.setFuncionario(funcionario);
 
             try {
-                controller.mostrarTela("/fxml/NovaTransferencia.fxml");
+                controller.mostrarTela("/fxml/Venda.fxml");
             } catch (IOException ex) {
                 Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
             }

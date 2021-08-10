@@ -81,9 +81,7 @@ public class MaterialController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.setMateriais(new ArrayList<>());
-        emf = Persistence.createEntityManagerFactory("venda");
-        em = emf.createEntityManager();
+        this.setMateriais(new ArrayList<>());        
 
         this.tblMaterial.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> this.detalhar(newValue));
@@ -100,11 +98,13 @@ public class MaterialController implements Initializable {
 
         Material material = new Material();
         if (this.mostrarTelaNovoMaterial(material)) {
+            emf = Persistence.createEntityManagerFactory("venda");
+            em = emf.createEntityManager();
             //funcionario.setSetor(this.getFuncionario().getSetor());
             em.getTransaction().begin();
             em.merge(material);
             em.getTransaction().commit();
-            //emf.close();
+            emf.close();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Material adicionado com sucesso");
             alert.show();
             this.atualizarTabela(this.listar());
@@ -116,10 +116,12 @@ public class MaterialController implements Initializable {
         Material material = this.tblMaterial.getSelectionModel().getSelectedItem();
         if (material != null) {
             if (this.mostrarTelaNovoMaterial(material)) {
+                emf = Persistence.createEntityManagerFactory("venda");
+                em = emf.createEntityManager();
                 em.getTransaction().begin();
                 em.merge(material);
                 em.getTransaction().commit();
-                //emf.close();
+                emf.close();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Material atualizado com sucesso");
                 alert.show();
                 this.atualizarTabela(this.listar());
@@ -139,7 +141,10 @@ public class MaterialController implements Initializable {
             alert.showAndWait();
 
             if (alert.getResult().getText().equals("OK")) {
+                emf = Persistence.createEntityManagerFactory("venda");
+                em = emf.createEntityManager();
                 em.remove(em.find(Material.class, material.getId()));
+                emf.close();
                 this.atualizarTabela(this.listar());
                 this.tblMaterial.getSelectionModel().selectFirst();
             }
@@ -185,14 +190,16 @@ public class MaterialController implements Initializable {
     }
 
     public List<Material> listar() {
+        emf = Persistence.createEntityManagerFactory("venda");
+        em = emf.createEntityManager();
         em.getTransaction().begin();
         Query consulta = em.createQuery("Select material from Material material");
-        List<Material> material = consulta.getResultList();
+        List<Material> materiais = consulta.getResultList();
 
         em.getTransaction().commit();
-        //emf.close();
+        emf.close();
 
-        return material;
+        return materiais;
     }
 
     private void atualizarTabela(List<Material> material) {
