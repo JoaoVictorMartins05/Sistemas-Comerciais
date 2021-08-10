@@ -24,7 +24,7 @@
                <children>
                   <TableView fx:id="tblEstoque" layoutX="-2.0" prefHeight="394.0" prefWidth="435.0" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
                      <columns>
-                        <TableColumn fx:id="tblColumCodigo" prefWidth="75.0" text="Código" />
+                        <TableColumn fx:id="tblColumCodigo" prefWidth="75.0" text="Material" />
                         <TableColumn fx:id="tblColumQtd" prefWidth="75.0" text="Quantidade" />
                      </columns>
                      <columnResizePolicy>

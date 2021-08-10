@@ -35,6 +35,7 @@ import javax.persistence.Query;
 import model.Estoque;
 import model.Funcionario;
 import model.Material;
+import model.visualization.EstoqueMaterial;
 
 /**
  * FXML Controller class
@@ -44,13 +45,13 @@ import model.Material;
 public class EstoqueController implements Initializable {
 
     @FXML
-    private TableView<Estoque> tblEstoque;
+    private TableView<EstoqueMaterial> tblEstoque;
 
     @FXML
-    private TableColumn<Estoque, String> tblColumCodigo;
+    private TableColumn<EstoqueMaterial, String> tblColumCodigo;
 
     @FXML
-    private TableColumn<Estoque, String> tblColumQtd;
+    private TableColumn<EstoqueMaterial, String> tblColumQtd;
 
     @FXML
     private TextField edtBusca;
@@ -76,7 +77,7 @@ public class EstoqueController implements Initializable {
     private Funcionario funcionarioLogado;
 
     private List<Estoque> estoques;
-    private ObservableList<Estoque> obsEstoques;
+    private ObservableList<EstoqueMaterial> obsEstoques;
 
     private EntityManagerFactory emf;
     private EntityManager em;
@@ -89,7 +90,7 @@ public class EstoqueController implements Initializable {
         this.setEstoques(new ArrayList<>());
 
         this.getTblEstoque().getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> this.detalhar(newValue.getMaterial()));
+                (observable, oldValue, newValue) -> this.ouvirTabela(newValue));
 
         this.getTblEstoque().getSelectionModel().selectFirst();
     }
@@ -100,14 +101,26 @@ public class EstoqueController implements Initializable {
 
         this.atualizarTabela();
     }
+    
+    private void ouvirTabela(EstoqueMaterial estoqueMaterial) {
+        Material material = new Material();
+        for(Estoque estoque : this.estoques) {
+            if(estoque.getId().equals(estoqueMaterial.getId())) {
+                material = estoqueMaterial.getMaterial(estoque);
+                break;
+            }
+        }
+        this.detalhar(material, estoqueMaterial);
+    }
 
-    private void detalhar(Material material) {
+    private void detalhar(Material material, EstoqueMaterial estoqueMaterial) {
         if (material != null) {
             this.lblId.setText(String.valueOf(material.getId()));
             this.lblNome.setText(material.getNome());
             this.lblUnidade.setText(material.getUnidadeMedida());
             this.lblValor.setText(String.valueOf(material.getValor()));
             this.lblDescricao.setText(material.getDescricao());
+            this.lblQuantidade.setText(Double.toString(estoqueMaterial.getQuantidade()));
         }
     }
 
@@ -127,11 +140,36 @@ public class EstoqueController implements Initializable {
         return estoques;
     }
 
-    private void atualizarTabela() {
-        this.tblColumQtd.setCellValueFactory(new PropertyValueFactory<Estoque, String>("quantidade"));
-        this.tblColumCodigo.setCellValueFactory(new PropertyValueFactory<Estoque, String>("id"));
+    private List<EstoqueMaterial> juntarEstoqueMaterial() {
+        List<EstoqueMaterial> materiais = new ArrayList<>();
+        emf = Persistence.createEntityManagerFactory("venda");
+        em = emf.createEntityManager();
 
-        this.obsEstoques = FXCollections.observableArrayList(this.estoques);
+        for (Estoque estoque : this.estoques) {
+            EstoqueMaterial estoqueMaterial = new EstoqueMaterial();
+
+            em.getTransaction().begin();
+            Query consulta = em.createNativeQuery("Select nome from material where material.id="+estoque.getMaterial().getId());
+            List<String>  nomeMaterial = consulta.getResultList();
+            em.getTransaction().commit();
+            
+            estoqueMaterial.setId(estoque.getId());
+            estoqueMaterial.setNomeMaterial(nomeMaterial.get(0));
+            estoqueMaterial.setQuantidade(estoque.getQuantidade());
+            estoqueMaterial.setNomeSetor(this.funcionarioLogado.getSetor().getNome());
+            
+            materiais.add(estoqueMaterial);
+        }
+        emf.close();
+
+        return materiais;
+    }
+
+    private void atualizarTabela() {
+        this.tblColumQtd.setCellValueFactory(new PropertyValueFactory<EstoqueMaterial, String>("quantidade"));
+        this.tblColumCodigo.setCellValueFactory(new PropertyValueFactory<EstoqueMaterial, String>("nomeMaterial"));
+
+        this.obsEstoques = FXCollections.observableArrayList(this.juntarEstoqueMaterial());
         this.tblEstoque.setItems(obsEstoques);
         //this.tblEstoque.getSelectionModel().select(0);
     }
@@ -171,13 +209,13 @@ public class EstoqueController implements Initializable {
     void remover(ActionEvent event) {
         this.editar(false);
     }
-    
+
     private void editar(boolean flag) {
         Estoque estoque = new Estoque();
-        
-        if (this.tblEstoque.getSelectionModel().getSelectedItem() != null) {
-             estoque = this.tblEstoque.getSelectionModel().getSelectedItem();
-        }        
+
+//        if (this.tblEstoque.getSelectionModel().getSelectedItem() != null) {
+//            estoque = this.tblEstoque.getSelectionModel().getSelectedItem();
+//        }
 
         if (this.mostrarTelaNovoEstoque(estoque)) {
 
@@ -186,9 +224,9 @@ public class EstoqueController implements Initializable {
                 if (estoque.getMaterial().getId().equals(e.getMaterial().getId())) {
                     double qtd = estoque.getQuantidade();
                     estoque = e;
-                    if(flag) {
+                    if (flag) {
                         estoque.setQuantidade(estoque.getQuantidade() + qtd);
-                    }else {
+                    } else {
                         estoque.setQuantidade(estoque.getQuantidade() - qtd);
                     }
                 }
@@ -202,10 +240,10 @@ public class EstoqueController implements Initializable {
             emf.close();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Material adicionado ao estoque com sucesso");
             alert.show();
-            
+
             this.setEstoques(this.listar());
-            
-            for( Estoque e : this.estoques) {
+
+            for (Estoque e : this.estoques) {
                 System.out.println(e.getMaterial().getNome());
             }
             this.atualizarTabela();
@@ -215,42 +253,42 @@ public class EstoqueController implements Initializable {
     /**
      * @return the tblEstoque
      */
-    public TableView<Estoque> getTblEstoque() {
+    public TableView<EstoqueMaterial> getTblEstoque() {
         return tblEstoque;
     }
 
     /**
      * @param tblEstoque the tblEstoque to set
      */
-    public void setTblEstoque(TableView<Estoque> tblEstoque) {
+    public void setTblEstoque(TableView<EstoqueMaterial> tblEstoque) {
         this.tblEstoque = tblEstoque;
     }
 
     /**
      * @return the tblColumCodigo
      */
-    public TableColumn<Estoque, String> getTblColumCodigo() {
+    public TableColumn<EstoqueMaterial, String> getTblColumCodigo() {
         return tblColumCodigo;
     }
 
     /**
      * @param tblColumCodigo the tblColumCodigo to set
      */
-    public void setTblColumCodigo(TableColumn<Estoque, String> tblColumCodigo) {
+    public void setTblColumCodigo(TableColumn<EstoqueMaterial, String> tblColumCodigo) {
         this.tblColumCodigo = tblColumCodigo;
     }
 
     /**
      * @return the tblColumNome
      */
-    public TableColumn<Estoque, String> getTblColumNome() {
+    public TableColumn<EstoqueMaterial, String> getTblColumNome() {
         return tblColumQtd;
     }
 
     /**
      * @param tblColumNome the tblColumNome to set
      */
-    public void setTblColumNome(TableColumn<Estoque, String> tblColumNome) {
+    public void setTblColumNome(TableColumn<EstoqueMaterial, String> tblColumNome) {
         this.tblColumQtd = tblColumNome;
     }
 
@@ -369,14 +407,14 @@ public class EstoqueController implements Initializable {
     /**
      * @return the obsEstoques
      */
-    public ObservableList<Estoque> getObsEstoques() {
+    public ObservableList<EstoqueMaterial> getObsEstoques() {
         return obsEstoques;
     }
 
     /**
      * @param obsEstoques the obsEstoques to set
      */
-    public void setObsEstoques(ObservableList<Estoque> obsEstoques) {
+    public void setObsEstoques(ObservableList<EstoqueMaterial> obsEstoques) {
         this.obsEstoques = obsEstoques;
     }
 
