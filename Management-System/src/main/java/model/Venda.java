@@ -38,6 +38,13 @@ public class Venda {
     
     @Column(nullable = false)
     private String Descricao;
+    
+    @Column(nullable = false)
+    private String formaPagamento;
+   
+    @ManyToOne
+    @JoinColumn(name = "idFuncionario", nullable = false)
+    private Funcionario funcionario;
 
     
     public Venda() {
@@ -126,6 +133,34 @@ public class Venda {
      */
     public void setDescricao(String Descricao) {
         this.Descricao = Descricao;
+    }
+
+    /**
+     * @return the formaPagamento
+     */
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    /**
+     * @param formaPagamento the formaPagamento to set
+     */
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    /**
+     * @return the funcionario
+     */
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    /**
+     * @param funcionario the funcionario to set
+     */
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
     
 }

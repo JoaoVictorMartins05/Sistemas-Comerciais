@@ -96,9 +96,9 @@ public class NovoMaterialController implements Initializable {
 
     private void preencheChoiceBox() {
         List<String> unidades = new ArrayList<>();
-        unidades.add("unidade");
+        unidades.add("Unidade");
         unidades.add("Litros");
-        unidades.add("Kilos");
+        unidades.add("Quilos");
         ObservableList obsUnidades = FXCollections.observableArrayList(unidades);
         
         System.out.println(obsUnidades);
