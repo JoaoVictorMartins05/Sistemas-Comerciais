@@ -6,17 +6,31 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import model.Estoque;
+import model.Funcionario;
 import model.Material;
 import model.Setor;
+import model.Transferencia;
+import model.visualization.Carrinho;
 
 /**
  * FXML Controller class
@@ -58,13 +72,139 @@ public class NovaTransferenciaController implements Initializable {
     @FXML
     private Button btnCancelar;
 
+    private Funcionario funcionarioLogado;
+    private List<Estoque> estoques;
+
+    private Transferencia transferencia;
+    private List<Material> materiais;
+    private List<Carrinho> carrinhos;
+
+    private ObservableList<Setor> obsSetores;
+
+    private EntityManagerFactory emf;
+    private EntityManager em;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        this.setTransferencia(new Transferencia());
+        this.setMateriais(new ArrayList<>());
+        this.setEstoques(new ArrayList<>());
     }
     
-        @FXML
+    public void init() {
+        this.carregarDestinatario();
+        this.carregarMateriais();
+    }
+
+    public void carregarDestinatario() {
+        this.setObsSetores(FXCollections.observableArrayList(this.listarSetores()));
+
+        this.getEdtDestinatario().setItems(getObsSetores());
+
+        this.mostrarSoNomeSetor();
+    }
+
+    public void carregarMateriais() {
+        ObservableList<Material> obsMaterial = FXCollections.observableArrayList(this.listarMateriaisDeUmSetor());
+
+        this.getEdtMaterial().setItems(obsMaterial);
+
+        this.mostrarSoNomeMaterial();
+    }
+
+    private List<Setor> listarSetores() {
+        emf = Persistence.createEntityManagerFactory("venda");
+        em = emf.createEntityManager();
+        
+        System.out.println(this.getFuncionarioLogado().getId());
+
+        String query = "SELECT * FROM `setor` WHERE setor.id != " + this.getFuncionarioLogado().getSetor().getId();
+
+        getEm().getTransaction().begin();
+        Query consulta = getEm().createNativeQuery(query, Setor.class);
+
+        List<Setor> setores = consulta.getResultList();
+
+        getEm().getTransaction().commit();
+        emf.close();
+
+        return setores;
+    }
+
+    private List<Material> listarMateriaisDeUmSetor() {
+        emf = Persistence.createEntityManagerFactory("venda");
+        em = emf.createEntityManager();
+
+        String query = "SELECT DISTINCT material.id, nome, descricao, unidadeMedida, valor FROM material INNER JOIN `Estoque` WHERE idSetor = " + this.getFuncionarioLogado().getSetor().getId();
+
+        getEm().getTransaction().begin();
+        Query consulta = getEm().createNativeQuery(query, Material.class);
+
+        List<Material> materiais = consulta.getResultList();
+        getEm().getTransaction().commit();
+        emf.close();
+
+        return materiais;
+    }
+
+    private void mostrarSoNomeMaterial() {
+        this.getEdtMaterial().setButtonCell(new ListCell<Material>() {
+            @Override
+            protected void updateItem(Material material, boolean bln) {
+                super.updateItem(material, bln);
+                if (material != null) {
+                    setText(material.getNome());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+
+        this.getEdtMaterial().setCellFactory((ListView<Material> p) -> {
+            return new ListCell<Material>() {
+                @Override
+                protected void updateItem(Material material, boolean bln) {
+                    super.updateItem(material, bln);
+                    if (material != null) {
+                        setText(material.getNome());
+                    } else {
+                        setText(null);
+                    }
+                }
+            };
+        });
+    }
+
+    private void mostrarSoNomeSetor() {
+        this.getEdtDestinatario().setButtonCell(new ListCell<Setor>() {
+            @Override
+            protected void updateItem(Setor setor, boolean bln) {
+                super.updateItem(setor, bln);
+                if (setor != null) {
+                    setText(setor.getNome());
+                } else {
+                    setText(null);
+                }
+            }
+        });
+
+        this.getEdtDestinatario().setCellFactory((ListView<Setor> p) -> {
+            return new ListCell<Setor>() {
+                @Override
+                protected void updateItem(Setor setor, boolean bln) {
+                    super.updateItem(setor, bln);
+                    if (setor != null) {
+                        setText(setor.getNome());
+                    } else {
+                        setText(null);
+                    }
+
+                }
+            };
+        });
+    }
+
+    @FXML
     void adicionar(ActionEvent event) {
 
     }
@@ -237,5 +377,117 @@ public class NovaTransferenciaController implements Initializable {
     public void setBtnCancelar(Button btnCancelar) {
         this.btnCancelar = btnCancelar;
     }
-    
+
+    /**
+     * @return the funcionarioLogado
+     */
+    public Funcionario getFuncionarioLogado() {
+        return funcionarioLogado;
+    }
+
+    /**
+     * @param funcionarioLogado the funcionarioLogado to set
+     */
+    public void setFuncionarioLogado(Funcionario funcionarioLogado) {
+        this.funcionarioLogado = funcionarioLogado;
+    }
+
+    /**
+     * @return the estoques
+     */
+    public List<Estoque> getEstoques() {
+        return estoques;
+    }
+
+    /**
+     * @param estoques the estoques to set
+     */
+    public void setEstoques(List<Estoque> estoques) {
+        this.estoques = estoques;
+    }
+
+    /**
+     * @return the transferencia
+     */
+    public Transferencia getTransferencia() {
+        return transferencia;
+    }
+
+    /**
+     * @param transferencia the transferencia to set
+     */
+    public void setTransferencia(Transferencia transferencia) {
+        this.transferencia = transferencia;
+    }
+
+    /**
+     * @return the materiais
+     */
+    public List<Material> getMateriais() {
+        return materiais;
+    }
+
+    /**
+     * @param materiais the materiais to set
+     */
+    public void setMateriais(List<Material> materiais) {
+        this.materiais = materiais;
+    }
+
+    /**
+     * @return the carrinhos
+     */
+    public List<Carrinho> getCarrinhos() {
+        return carrinhos;
+    }
+
+    /**
+     * @param carrinhos the carrinhos to set
+     */
+    public void setCarrinhos(List<Carrinho> carrinhos) {
+        this.carrinhos = carrinhos;
+    }
+
+    /**
+     * @return the obsSetores
+     */
+    public ObservableList<Setor> getObsSetores() {
+        return obsSetores;
+    }
+
+    /**
+     * @param obsSetores the obsSetores to set
+     */
+    public void setObsSetores(ObservableList<Setor> obsSetores) {
+        this.obsSetores = obsSetores;
+    }
+
+    /**
+     * @return the emf
+     */
+    public EntityManagerFactory getEmf() {
+        return emf;
+    }
+
+    /**
+     * @param emf the emf to set
+     */
+    public void setEmf(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+
+    /**
+     * @return the em
+     */
+    public EntityManager getEm() {
+        return em;
+    }
+
+    /**
+     * @param em the em to set
+     */
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
 }

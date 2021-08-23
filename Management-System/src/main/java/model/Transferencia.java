@@ -32,6 +32,10 @@ public class Transferencia {
     @JoinColumn(name = "idSetorDestino", nullable = false)
     private Setor setorDestino;
     
+    @ManyToOne
+    @JoinColumn(name = "idFuncionario", nullable = false)
+    private Funcionario funcionario;
+    
     @Column(nullable = false)
     private String status;
     
@@ -135,6 +139,20 @@ public class Transferencia {
      */
     public void setData(Date data) {
         this.data = data;
+    }
+
+    /**
+     * @return the funcionario
+     */
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    /**
+     * @param funcionario the funcionario to set
+     */
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
     
     

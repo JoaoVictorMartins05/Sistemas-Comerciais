@@ -108,7 +108,7 @@ public class MainController implements Initializable {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void estoque() {
         try {
             this.mostrarTela("/fxml/estoque.fxml");
@@ -121,14 +121,18 @@ public class MainController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(this.getClass().getResource(frame));
         AnchorPane a = (AnchorPane) loader.load();
-        
+
         if (frame.equals("/fxml/estoque.fxml")) {
             EstoqueController controller = loader.getController();
-            
+
             controller.init(this.getFuncionario());
+        } else if (frame.equals("/fxml/NovaTransferencia.fxml")) {
+            NovaTransferenciaController controller = loader.getController();
+            controller.setFuncionarioLogado(this.getFuncionario());
+
+            controller.init();
+            this.anchorpane.setCenter(a);
         }
-        
-        this.anchorpane.setCenter(a);
     }
 
     public void start() throws Exception {

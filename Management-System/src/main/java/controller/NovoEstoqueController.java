@@ -59,6 +59,9 @@ public class NovoEstoqueController implements Initializable {
 
     private Funcionario funcionarioLogado;
 
+    EntityManagerFactory emf;
+    EntityManager em;
+
     /**
      * Initializes the controller class.
      */
@@ -110,14 +113,10 @@ public class NovoEstoqueController implements Initializable {
     }
 
     private List<Material> listarMateriais() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("venda");
-        EntityManager em = emf.createEntityManager();
-
-        System.out.println();
-
+        emf = Persistence.createEntityManagerFactory("venda");
+        em = emf.createEntityManager();
         em.getTransaction().begin();
-        Query consulta = em.createNativeQuery("SELECT * from material WHERE material.id = (SELECT DISTINCT idMaterial FROM Estoque JOIN setor ON Estoque.idSetor = " + this.getFuncionarioLogado().getSetor().getId() + ")", Material.class);
-
+        Query consulta = em.createQuery("Select material from Material material");
         List<Material> materiais = consulta.getResultList();
 
         em.getTransaction().commit();
@@ -134,7 +133,7 @@ public class NovoEstoqueController implements Initializable {
     }
 
     private void preencheChoiceBox() {
-        ObservableList<Material> obsMateriais = FXCollections.observableArrayList(new MaterialController().listar());
+        ObservableList<Material> obsMateriais = FXCollections.observableArrayList(this.listarMateriais());
 
         this.edtNome.setItems(obsMateriais);
 

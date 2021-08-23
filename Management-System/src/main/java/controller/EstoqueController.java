@@ -189,7 +189,6 @@ public class EstoqueController implements Initializable {
             controller.setEstoque(estoque);
             controller.setStage(stage);
             controller.init(this.getFuncionarioLogado());
-            //controller.setFuncionarioLogado(this.getFuncionarioLogado());
 
             stage.showAndWait();
 
@@ -213,9 +212,13 @@ public class EstoqueController implements Initializable {
     private void editar(boolean flag) {
         Estoque estoque = new Estoque();
 
-//        if (this.tblEstoque.getSelectionModel().getSelectedItem() != null) {
-//            estoque = this.tblEstoque.getSelectionModel().getSelectedItem();
-//        }
+        if (this.tblEstoque.getSelectionModel().getSelectedItem() != null) {
+            for(Estoque e : this.estoques) {
+                if(e.getId().equals(this.tblEstoque.getSelectionModel().getSelectedItem().getId())) {
+                    estoque = e;
+                }
+            }
+        }
 
         if (this.mostrarTelaNovoEstoque(estoque)) {
 
@@ -238,8 +241,14 @@ public class EstoqueController implements Initializable {
             em.merge(estoque);
             em.getTransaction().commit();
             emf.close();
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Material adicionado ao estoque com sucesso");
-            alert.show();
+            
+            if(flag){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Materiais adicionados ao estoque com sucesso");
+                alert.show();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Materiais removidos do estoque com sucesso");
+                alert.show();
+            }                
 
             this.setEstoques(this.listar());
 
