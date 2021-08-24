@@ -128,8 +128,6 @@ public class EstoqueController implements Initializable {
         setEmf(Persistence.createEntityManagerFactory("venda"));
         setEm(getEmf().createEntityManager());
 
-        System.out.println("\n\n\n" + this.getFuncionarioLogado().getNome() + "\n\n\n");
-
         em.getTransaction().begin();
         Query consulta = em.createNativeQuery("SELECT * FROM Estoque WHERE Estoque.idSetor = " + this.getFuncionarioLogado().getSetor().getId(), Estoque.class);
         List<Estoque> estoques = consulta.getResultList();

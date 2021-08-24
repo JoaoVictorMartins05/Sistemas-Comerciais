@@ -9,11 +9,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -21,12 +24,14 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import model.Estoque;
 import model.Funcionario;
+import model.ItemTransferencia;
 import model.Material;
 import model.Setor;
 import model.Transferencia;
@@ -46,16 +51,16 @@ public class NovaTransferenciaController implements Initializable {
     private ComboBox<Material> edtMaterial;
 
     @FXML
-    private TableView<Material> tblCarrinho;
+    private TableView<Carrinho> tblCarrinho;
 
     @FXML
-    private TableColumn<Material, String> colunaId;
+    private TableColumn<Carrinho, String> colunaId;
 
     @FXML
-    private TableColumn<Material, String> colunaNome;
+    private TableColumn<Carrinho, String> colunaNome;
 
     @FXML
-    private TableColumn<Material, String> colunaQuantidade;
+    private TableColumn<Carrinho, String> colunaQuantidade;
 
     @FXML
     private Button btnadicionar;
@@ -78,7 +83,8 @@ public class NovaTransferenciaController implements Initializable {
     private Transferencia transferencia;
     private List<Material> materiais;
     private List<Carrinho> carrinhos;
-
+    private List<ItemTransferencia> itens;
+    
     private ObservableList<Setor> obsSetores;
 
     private EntityManagerFactory emf;
@@ -89,6 +95,8 @@ public class NovaTransferenciaController implements Initializable {
         this.setTransferencia(new Transferencia());
         this.setMateriais(new ArrayList<>());
         this.setEstoques(new ArrayList<>());
+        this.setItens(new ArrayList<>());
+        this.setCarrinhos(new ArrayList<>());
     }
     
     public void init() {
@@ -113,8 +121,8 @@ public class NovaTransferenciaController implements Initializable {
     }
 
     private List<Setor> listarSetores() {
-        emf = Persistence.createEntityManagerFactory("venda");
-        em = emf.createEntityManager();
+        setEmf(Persistence.createEntityManagerFactory("venda"));
+        setEm(getEmf().createEntityManager());
         
         System.out.println(this.getFuncionarioLogado().getId());
 
@@ -126,14 +134,14 @@ public class NovaTransferenciaController implements Initializable {
         List<Setor> setores = consulta.getResultList();
 
         getEm().getTransaction().commit();
-        emf.close();
+        getEmf().close();
 
         return setores;
     }
 
     private List<Material> listarMateriaisDeUmSetor() {
-        emf = Persistence.createEntityManagerFactory("venda");
-        em = emf.createEntityManager();
+        setEmf(Persistence.createEntityManagerFactory("venda"));
+        setEm(getEmf().createEntityManager());
 
         String query = "SELECT DISTINCT material.id, nome, descricao, unidadeMedida, valor FROM material INNER JOIN `Estoque` WHERE idSetor = " + this.getFuncionarioLogado().getSetor().getId();
 
@@ -142,7 +150,7 @@ public class NovaTransferenciaController implements Initializable {
 
         List<Material> materiais = consulta.getResultList();
         getEm().getTransaction().commit();
-        emf.close();
+        getEmf().close();
 
         return materiais;
     }
@@ -203,10 +211,109 @@ public class NovaTransferenciaController implements Initializable {
             };
         });
     }
+    private boolean validaCampos() {
+        Setor setor = this.getEdtDestinatario().getSelectionModel().getSelectedItem();
+        Material material = this.getEdtMaterial().getSelectionModel().getSelectedItem();
 
+        if (setor == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhum Setor de Destino Selecionado");
+            alert.show();
+            return false;
+        } else if (material == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhum Material Selecionado");
+            alert.show();
+            return false;
+        } else if (this.getEdtQuantidade().getText().equals("")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhuma Quantidade Informada");
+            alert.show();
+            return false;
+        } else {
+            try {
+                Double.parseDouble(this.getEdtQuantidade().getText());
+            } catch (NumberFormatException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "A Quantidade Deve Ser um Número");
+                alert.show();                
+                Logger.getLogger(NovaTransferenciaController.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    private Estoque buscarEstoque(Material material) {
+        setEmf(Persistence.createEntityManagerFactory("venda"));
+        setEm(getEmf().createEntityManager());
+        
+        String query = "SELECT * FROM Estoque WHERE Estoque.idSetor = " 
+                + this.getFuncionarioLogado().getSetor().getId() 
+                + " AND Estoque.idMaterial = " 
+                + material.getId();
+        
+        System.out.println(query);
+
+        getEm().getTransaction().begin();
+        Query consulta = getEm().createNativeQuery(query, Estoque.class);
+        List<Estoque> estoques = consulta.getResultList();
+
+        getEm().getTransaction().commit();
+        getEmf().close();
+
+        return estoques.get(0);
+    }
+    
     @FXML
-    void adicionar(ActionEvent event) {
+    public void adicionar(ActionEvent event) {
+        ItemTransferencia item = new ItemTransferencia();
+        
+        if (this.validaCampos()) {
+            Material material = this.getEdtMaterial().getSelectionModel().getSelectedItem();
+            
+            item.setEstoque(this.buscarEstoque(material));
+            item.setQuantidade(Double.parseDouble(this.getEdtQuantidade().getText()));
 
+            boolean flag = false;
+            for (ItemTransferencia i : this.getItens()) {
+                if (i.getEstoque().equals(i.getEstoque())) {
+                    i.setQuantidade(i.getQuantidade() + item.getQuantidade());
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (!flag) {
+                this.getItens().add(item);
+            }
+
+            Carrinho carrinho = new Carrinho();
+
+            carrinho.setNomeMaterial(material.getNome());
+            carrinho.setCodigoMaterial(material.getId());
+            carrinho.setQuantidade(item.getQuantidade());
+//            carrinho.setUnidadeMedidaMaterial(material.getUnidadeMedida());
+//            carrinho.setValorMaterial(material.getValor());
+//            carrinho.setValorTotal(material.getValor() * item.getQuantidade());
+
+            for (Carrinho c : this.getCarrinhos()) {
+                if (c.getCodigoMaterial().equals(carrinho.getCodigoMaterial())) {
+                    carrinho.setQuantidade(c.getQuantidade() + carrinho.getQuantidade());
+                    this.getCarrinhos().remove(c);
+                    break;
+                }
+            }
+
+            this.getCarrinhos().add(carrinho);
+        }
+        this.atualizarTabela();
+    }
+
+    private void atualizarTabela() {
+        this.getColunaId().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("codigoMaterial"));
+        this.getColunaNome().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("nomeMaterial"));
+        this.getColunaQuantidade().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("quantidade"));
+        
+        System.out.println(this.getCarrinhos().get(0).getCodigoMaterial());
+
+        this.getTblCarrinho().setItems(FXCollections.observableArrayList(this.getCarrinhos()));
     }
 
     @FXML
@@ -255,56 +362,56 @@ public class NovaTransferenciaController implements Initializable {
     /**
      * @return the tblCarrinho
      */
-    public TableView<Material> getTblCarrinho() {
+    public TableView<Carrinho> getTblCarrinho() {
         return tblCarrinho;
     }
 
     /**
      * @param tblCarrinho the tblCarrinho to set
      */
-    public void setTblCarrinho(TableView<Material> tblCarrinho) {
+    public void setTblCarrinho(TableView<Carrinho> tblCarrinho) {
         this.tblCarrinho = tblCarrinho;
     }
 
     /**
      * @return the colunaId
      */
-    public TableColumn<Material, String> getColunaId() {
+    public TableColumn<Carrinho, String> getColunaId() {
         return colunaId;
     }
 
     /**
      * @param colunaId the colunaId to set
      */
-    public void setColunaId(TableColumn<Material, String> colunaId) {
+    public void setColunaId(TableColumn<Carrinho, String> colunaId) {
         this.colunaId = colunaId;
     }
 
     /**
      * @return the colunaNome
      */
-    public TableColumn<Material, String> getColunaNome() {
+    public TableColumn<Carrinho, String> getColunaNome() {
         return colunaNome;
     }
 
     /**
      * @param colunaNome the colunaNome to set
      */
-    public void setColunaNome(TableColumn<Material, String> colunaNome) {
+    public void setColunaNome(TableColumn<Carrinho, String> colunaNome) {
         this.colunaNome = colunaNome;
     }
 
     /**
      * @return the colunaQuantidade
      */
-    public TableColumn<Material, String> getColunaQuantidade() {
+    public TableColumn<Carrinho, String> getColunaQuantidade() {
         return colunaQuantidade;
     }
 
     /**
      * @param colunaQuantidade the colunaQuantidade to set
      */
-    public void setColunaQuantidade(TableColumn<Material, String> colunaQuantidade) {
+    public void setColunaQuantidade(TableColumn<Carrinho, String> colunaQuantidade) {
         this.colunaQuantidade = colunaQuantidade;
     }
 
@@ -447,21 +554,7 @@ public class NovaTransferenciaController implements Initializable {
     public void setCarrinhos(List<Carrinho> carrinhos) {
         this.carrinhos = carrinhos;
     }
-
-    /**
-     * @return the obsSetores
-     */
-    public ObservableList<Setor> getObsSetores() {
-        return obsSetores;
-    }
-
-    /**
-     * @param obsSetores the obsSetores to set
-     */
-    public void setObsSetores(ObservableList<Setor> obsSetores) {
-        this.obsSetores = obsSetores;
-    }
-
+    
     /**
      * @return the emf
      */
@@ -488,6 +581,34 @@ public class NovaTransferenciaController implements Initializable {
      */
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+
+    /**
+     * @return the itens
+     */
+    public List<ItemTransferencia> getItens() {
+        return itens;
+    }
+
+    /**
+     * @param itens the itens to set
+     */
+    public void setItens(List<ItemTransferencia> itens) {
+        this.itens = itens;
+    }
+
+    /**
+     * @return the obsSetores
+     */
+    public ObservableList<Setor> getObsSetores() {
+        return obsSetores;
+    }
+
+    /**
+     * @param obsSetores the obsSetores to set
+     */
+    public void setObsSetores(ObservableList<Setor> obsSetores) {
+        this.obsSetores = obsSetores;
     }
 
 }

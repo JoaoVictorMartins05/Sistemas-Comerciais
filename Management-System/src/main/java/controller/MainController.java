@@ -130,9 +130,9 @@ public class MainController implements Initializable {
             NovaTransferenciaController controller = loader.getController();
             controller.setFuncionarioLogado(this.getFuncionario());
 
-            controller.init();
-            this.anchorpane.setCenter(a);
+            controller.init();            
         }
+        this.anchorpane.setCenter(a);
     }
 
     public void start() throws Exception {
