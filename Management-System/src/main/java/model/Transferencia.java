@@ -17,35 +17,40 @@ import javax.persistence.Table;
  *
  * @author joaov
  */
-
 @Entity
 @Table(name = "transferencia")
 public class Transferencia {
+
     @Id
     private long id;
-    
+
     @ManyToOne
     @JoinColumn(name = "idSetorOrigem", nullable = false)
     private Setor setorOrigem;
-    
+
     @ManyToOne
     @JoinColumn(name = "idSetorDestino", nullable = false)
     private Setor setorDestino;
-    
+
     @ManyToOne
     @JoinColumn(name = "idFuncionario", nullable = false)
     private Funcionario funcionario;
-    
+
     @Column(nullable = false)
     private String status;
-    
-    @Column(nullable = false)
+
     private String Descricao;
-    
-    @Column(nullable = false)   
+
+    @Column(nullable = false)
     private Date data;
 
     public Transferencia() {
+        this.id = -1L;
+        this.setorOrigem = new Setor();
+        this.setorDestino = new Setor();
+        this.status = "";
+        this.Descricao = "";
+        this.data = null;
     }
 
     public Transferencia(long id, Setor setorOrigem, Setor setorDestino, String status, String Descricao, Date data) {
@@ -55,9 +60,9 @@ public class Transferencia {
         this.status = status;
         this.Descricao = Descricao;
         this.data = data;
-    }    
-    
-     /**
+    }
+
+    /**
      * @return the id
      */
     public long getId() {
@@ -154,6 +159,5 @@ public class Transferencia {
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
     }
-    
-    
+
 }

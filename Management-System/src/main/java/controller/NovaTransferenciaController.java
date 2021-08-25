@@ -7,6 +7,7 @@ package controller;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -84,7 +85,7 @@ public class NovaTransferenciaController implements Initializable {
     private List<Material> materiais;
     private List<Carrinho> carrinhos;
     private List<ItemTransferencia> itens;
-    
+
     private ObservableList<Setor> obsSetores;
 
     private EntityManagerFactory emf;
@@ -98,7 +99,7 @@ public class NovaTransferenciaController implements Initializable {
         this.setItens(new ArrayList<>());
         this.setCarrinhos(new ArrayList<>());
     }
-    
+
     public void init() {
         this.carregarDestinatario();
         this.carregarMateriais();
@@ -123,7 +124,7 @@ public class NovaTransferenciaController implements Initializable {
     private List<Setor> listarSetores() {
         setEmf(Persistence.createEntityManagerFactory("venda"));
         setEm(getEmf().createEntityManager());
-        
+
         System.out.println(this.getFuncionarioLogado().getId());
 
         String query = "SELECT * FROM `setor` WHERE setor.id != " + this.getFuncionarioLogado().getSetor().getId();
@@ -211,6 +212,7 @@ public class NovaTransferenciaController implements Initializable {
             };
         });
     }
+
     private boolean validaCampos() {
         Setor setor = this.getEdtDestinatario().getSelectionModel().getSelectedItem();
         Material material = this.getEdtMaterial().getSelectionModel().getSelectedItem();
@@ -232,23 +234,23 @@ public class NovaTransferenciaController implements Initializable {
                 Double.parseDouble(this.getEdtQuantidade().getText());
             } catch (NumberFormatException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "A Quantidade Deve Ser um Número");
-                alert.show();                
+                alert.show();
                 Logger.getLogger(NovaTransferenciaController.class.getName()).log(Level.SEVERE, null, ex);
                 return false;
             }
         }
         return true;
     }
-    
+
     private Estoque buscarEstoque(Material material) {
         setEmf(Persistence.createEntityManagerFactory("venda"));
         setEm(getEmf().createEntityManager());
-        
-        String query = "SELECT * FROM Estoque WHERE Estoque.idSetor = " 
-                + this.getFuncionarioLogado().getSetor().getId() 
-                + " AND Estoque.idMaterial = " 
+
+        String query = "SELECT * FROM Estoque WHERE Estoque.idSetor = "
+                + this.getFuncionarioLogado().getSetor().getId()
+                + " AND Estoque.idMaterial = "
                 + material.getId();
-        
+
         System.out.println(query);
 
         getEm().getTransaction().begin();
@@ -260,75 +262,145 @@ public class NovaTransferenciaController implements Initializable {
 
         return estoques.get(0);
     }
-    
+
     @FXML
     public void adicionar(ActionEvent event) {
         ItemTransferencia item = new ItemTransferencia();
-        
+
         if (this.validaCampos()) {
             Material material = this.getEdtMaterial().getSelectionModel().getSelectedItem();
-            
+
             item.setEstoque(this.buscarEstoque(material));
             item.setQuantidade(Double.parseDouble(this.getEdtQuantidade().getText()));
 
-            boolean flag = false;
-            for (ItemTransferencia i : this.getItens()) {
-                if (i.getEstoque().equals(i.getEstoque())) {
-                    i.setQuantidade(i.getQuantidade() + item.getQuantidade());
-                    flag = true;
-                    break;
-                }
-            }
-
-            if (!flag) {
+            if (!this.jaExisteItem(item)) {
                 this.getItens().add(item);
             }
 
-            Carrinho carrinho = new Carrinho();
+            Carrinho carrinho = this.preencheCarrinho(material, item);
 
-            carrinho.setNomeMaterial(material.getNome());
-            carrinho.setCodigoMaterial(material.getId());
-            carrinho.setQuantidade(item.getQuantidade());
+            this.adicionaMaterialNoCarrinho(carrinho);
+        }
+        this.atualizarTabela();
+    }
+
+    private boolean jaExisteItem(ItemTransferencia item) {
+        for (ItemTransferencia i : this.getItens()) {
+            if (i.getEstoque().equals(i.getEstoque())) {
+                i.setQuantidade(i.getQuantidade() + item.getQuantidade());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Carrinho preencheCarrinho(Material material, ItemTransferencia item) {
+        Carrinho carrinho = new Carrinho();
+
+        carrinho.setNomeMaterial(material.getNome());
+        carrinho.setCodigoMaterial(material.getId());
+        carrinho.setQuantidade(item.getQuantidade());
 //            carrinho.setUnidadeMedidaMaterial(material.getUnidadeMedida());
 //            carrinho.setValorMaterial(material.getValor());
 //            carrinho.setValorTotal(material.getValor() * item.getQuantidade());
+        return carrinho;
+    }
 
-            for (Carrinho c : this.getCarrinhos()) {
-                if (c.getCodigoMaterial().equals(carrinho.getCodigoMaterial())) {
-                    carrinho.setQuantidade(c.getQuantidade() + carrinho.getQuantidade());
-                    this.getCarrinhos().remove(c);
-                    break;
-                }
+    private void adicionaMaterialNoCarrinho(Carrinho carrinho) {
+        for (Carrinho c : this.getCarrinhos()) {
+            if (c.getCodigoMaterial().equals(carrinho.getCodigoMaterial())) {
+                carrinho.setQuantidade(c.getQuantidade() + carrinho.getQuantidade());
+                this.getCarrinhos().remove(c);
+                break;
             }
-
-            this.getCarrinhos().add(carrinho);
         }
-        this.atualizarTabela();
+        this.getCarrinhos().add(carrinho);
     }
 
     private void atualizarTabela() {
         this.getColunaId().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("codigoMaterial"));
         this.getColunaNome().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("nomeMaterial"));
         this.getColunaQuantidade().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("quantidade"));
-        
-        System.out.println(this.getCarrinhos().get(0).getCodigoMaterial());
 
-        this.getTblCarrinho().setItems(FXCollections.observableArrayList(this.getCarrinhos()));
+        ObservableList obsCarrinhos = FXCollections.observableArrayList(this.getCarrinhos());
+        
+        this.getTblCarrinho().setItems(this.getCarrinhos().isEmpty() ? null : obsCarrinhos);       
     }
 
     @FXML
     void cancelar(ActionEvent event) {
-
+        this.limparTransferencia();
     }
 
     @FXML
     void finalizar(ActionEvent event) {
+        this.transferencia.setSetorOrigem(this.getFuncionarioLogado().getSetor());
+        this.transferencia.setSetorDestino(this.getEdtDestinatario().getSelectionModel().getSelectedItem());
+        this.transferencia.setFuncionario(this.getFuncionarioLogado());
+        this.transferencia.setData(new Date());
+        this.transferencia.setStatus("Em andamento");
 
+        setEmf(Persistence.createEntityManagerFactory("venda"));
+        setEm(getEmf().createEntityManager());
+        
+        em.getTransaction().begin();
+        em.merge(this.transferencia);
+
+        em.getTransaction().commit();
+
+        em.getTransaction().begin();
+        Query consulta = em.createNativeQuery("Select * from transferencia where data = (Select max(data) from transferencia)", Transferencia.class);
+        this.transferencia = (Transferencia) consulta.getResultList().get(0);
+
+        em.getTransaction().commit();
+
+        for (ItemTransferencia i : this.getItens()) {
+            i.setTranferencia(this.transferencia);
+
+            System.out.println(i.getEstoque().getMaterial().getNome());
+            System.out.println(i.getTranferencia().getId());
+
+            em.getTransaction().begin();
+            em.persist(i);
+            em.getTransaction().commit();
+        }
+        emf.close();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Transferencia Realizada Com Sucesso");
+        alert.show();
+        
+        this.limparTransferencia();
+    }
+    
+    private void limparTransferencia() {
+        this.transferencia = new Transferencia();
+        this.materiais = new ArrayList<>();
+        this.carrinhos = new ArrayList<>();
+        this.itens = new ArrayList<>();
+
+        this.tblCarrinho.setItems(null);
+        this.getEdtDestinatario().getSelectionModel().clearSelection();
+        this.getEdtMaterial().getSelectionModel().clearSelection();
+        this.edtQuantidade.clear();
     }
 
     @FXML
     void remover(ActionEvent event) {
+        Carrinho carrinho = this.tblCarrinho.getSelectionModel().getSelectedItem();
 
+        if (carrinho != null) {
+            for (ItemTransferencia item : this.getItens()) {
+                if(item.getEstoque().getMaterial().getId().equals(carrinho.getCodigoMaterial())) {
+                    this.getItens().remove(item);
+                    break;
+                }
+            }
+            this.getCarrinhos().remove(carrinho);
+            this.atualizarTabela();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhum Material Selecionado");
+            alert.show();
+        }
     }
 
     /**
@@ -554,7 +626,7 @@ public class NovaTransferenciaController implements Initializable {
     public void setCarrinhos(List<Carrinho> carrinhos) {
         this.carrinhos = carrinhos;
     }
-    
+
     /**
      * @return the emf
      */
