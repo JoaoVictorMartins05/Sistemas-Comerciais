@@ -116,6 +116,14 @@ public class MainController implements Initializable {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void verTransferencias() {
+        try {
+            this.mostrarTela("/fxml/Transferencia.fxml");
+        } catch (IOException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public void mostrarTela(String frame) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -131,6 +139,12 @@ public class MainController implements Initializable {
             controller.setFuncionarioLogado(this.getFuncionario());
 
             controller.init();            
+        } else if(frame.equals("/fxml/Transferencia.fxml")) {
+            TransferenciaController controller = loader.getController();
+            controller.setFuncionarioLogado(this.getFuncionario());   
+            controller.setPainelPrincipal(this.anchorpane);   
+            
+            controller.carregarComboBox();
         }
         this.anchorpane.setCenter(a);
     }

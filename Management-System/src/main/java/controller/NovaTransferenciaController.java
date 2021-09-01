@@ -275,6 +275,9 @@ public class NovaTransferenciaController implements Initializable {
 
             if (!this.jaExisteItem(item)) {
                 this.getItens().add(item);
+                for(ItemTransferencia i : this.getItens()) {
+                    System.out.println(i.getEstoque().getMaterial().getNome());
+                }
             }
 
             Carrinho carrinho = this.preencheCarrinho(material, item);
@@ -286,7 +289,7 @@ public class NovaTransferenciaController implements Initializable {
 
     private boolean jaExisteItem(ItemTransferencia item) {
         for (ItemTransferencia i : this.getItens()) {
-            if (i.getEstoque().equals(i.getEstoque())) {
+            if (i.getEstoque().getId().equals(item.getEstoque().getId())) {
                 i.setQuantidade(i.getQuantidade() + item.getQuantidade());
                 return true;
             }
@@ -300,9 +303,6 @@ public class NovaTransferenciaController implements Initializable {
         carrinho.setNomeMaterial(material.getNome());
         carrinho.setCodigoMaterial(material.getId());
         carrinho.setQuantidade(item.getQuantidade());
-//            carrinho.setUnidadeMedidaMaterial(material.getUnidadeMedida());
-//            carrinho.setValorMaterial(material.getValor());
-//            carrinho.setValorTotal(material.getValor() * item.getQuantidade());
         return carrinho;
     }
 
@@ -357,7 +357,8 @@ public class NovaTransferenciaController implements Initializable {
         for (ItemTransferencia i : this.getItens()) {
             i.setTranferencia(this.transferencia);
 
-            System.out.println(i.getEstoque().getMaterial().getNome());
+            System.out.println("\n\n\n\n");
+            System.out.println(i.getEstoque().getMaterial().getNome() + "\n\n\n\n");
             System.out.println(i.getTranferencia().getId());
 
             em.getTransaction().begin();

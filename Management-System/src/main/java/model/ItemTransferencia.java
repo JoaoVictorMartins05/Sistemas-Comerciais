@@ -18,6 +18,7 @@ public class ItemTransferencia {
 
  
     @Id
+    @GeneratedValue
     private long id;
     
     @ManyToOne
