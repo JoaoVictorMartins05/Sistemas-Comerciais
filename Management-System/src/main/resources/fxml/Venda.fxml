@@ -20,8 +20,9 @@
       <TableView fx:id="tblVenda" layoutY="229.0" prefHeight="346.0" prefWidth="1131.0" style="-fx-background-color: #deea94;" AnchorPane.bottomAnchor="185.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="229.0">
          <columns>
             <TableColumn fx:id="tblColumnCodigo" prefWidth="165.0" text="Código" />
-            <TableColumn fx:id="tblColumnDescricao" prefWidth="362.0" text="Descrição" />
+            <TableColumn fx:id="tblColumnNome" prefWidth="362.0" text="Nome" />
             <TableColumn fx:id="tblColumnQuantidade" prefWidth="112.0" text="Qtde." />
+            <TableColumn fx:id="tblColumnUnMedida" prefWidth="75.0" text="Un_Medida" />
             <TableColumn fx:id="tblColumnValor" prefWidth="110.0" text="Valor" />
             <TableColumn fx:id="tblColumnTotal" minWidth="0.0" prefWidth="255.0" text="Total" />
          </columns>
@@ -37,7 +38,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="edtCodProduto" layoutX="26.0" layoutY="30.0" prefHeight="37.0" prefWidth="252.0" style="-fx-background-color: #deea94;" text="000000000001">
+            <TextField fx:id="edtCodProduto" layoutX="26.0" layoutY="30.0" onKeyPressed="#add" prefHeight="37.0" prefWidth="252.0" style="-fx-background-color: #deea94;">
                <font>
                   <Font size="17.0" />
                </font>
@@ -53,7 +54,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="edtQuantidade" layoutX="342.0" layoutY="28.0" prefHeight="43.0" prefWidth="145.0" text="1">
+            <TextField fx:id="edtQuantidade" layoutX="342.0" layoutY="28.0" onKeyPressed="#addTabela" prefHeight="43.0" prefWidth="145.0" text="1">
                <font>
                   <Font size="18.0" />
                </font>
@@ -64,7 +65,6 @@
                </font>
             </TextField>
             <Text layoutX="26.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <Button fx:id="btnAdd" layoutX="732.0" layoutY="37.0" mnemonicParsing="false" onAction="#add" text="ADD" />
          </children>
       </Pane>
       <Pane layoutX="823.0" layoutY="581.0" prefHeight="105.0" prefWidth="305.0" style="-fx-background-color: #99e599;" AnchorPane.bottomAnchor="74.0" AnchorPane.rightAnchor="3.0">
@@ -88,7 +88,7 @@
       </Text>
       <ButtonBar layoutX="566.0" layoutY="708.0" prefHeight="38.0" prefWidth="542.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="23.0">
          <buttons>
-            <Button mnemonicParsing="false" onAction="#excluir" prefHeight="45.0" prefWidth="125.0" text="EXCLUIR ITEM" textFill="#70751d">
+            <Button mnemonicParsing="false" onAction="#remover" prefHeight="45.0" prefWidth="125.0" text="EXCLUIR ITEM" textFill="#70751d">
                <graphic>
                   <ImageView fx:id="btnExcluir" nodeOrientation="RIGHT_TO_LEFT">
                      <image>
@@ -132,7 +132,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Text fill="#e80505" layoutX="37.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" text="Venda Iniciada" textAlignment="CENTER" AnchorPane.bottomAnchor="695.0" AnchorPane.leftAnchor="37.0" AnchorPane.rightAnchor="852.09326171875" AnchorPane.topAnchor="14.0">
+      <Text fill="#e80505" layoutX="445.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" text="Venda Iniciada" textAlignment="CENTER" AnchorPane.bottomAnchor="692.2158203125" AnchorPane.leftAnchor="445.0" AnchorPane.rightAnchor="444.1865234375" AnchorPane.topAnchor="21.2314453125">
          <font>
             <Font name="System Bold" size="35.0" />
          </font>

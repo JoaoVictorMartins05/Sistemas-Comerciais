@@ -7,10 +7,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="344.0" prefWidth="259.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controller.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="344.0" prefWidth="259.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <children>
-      <TextField fx:id="txtUsuario" layoutX="50.0" layoutY="99.0" prefHeight="0.0" prefWidth="171.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+      <TextField fx:id="txtUsuario" layoutX="50.0" layoutY="99.0" onKeyPressed="#irParaSenha" prefHeight="0.0" prefWidth="171.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
       <ButtonBar layoutX="21.0" layoutY="258.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="40.0">
         <buttons>
             <Button fx:id="btnEntrar" mnemonicParsing="false" onAction="#entrar" prefHeight="26.0" prefWidth="180.0" text="Entrar" />
@@ -18,6 +17,6 @@
       </ButtonBar>
       <Label layoutX="40.0" layoutY="173.0" text="Senha" AnchorPane.leftAnchor="40.0" />
       <Label layoutX="40.0" layoutY="82.0" text="Usuario" AnchorPane.leftAnchor="40.0" />
-      <PasswordField fx:id="txtSenha" layoutX="44.0" layoutY="189.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+      <PasswordField fx:id="txtSenha" layoutX="44.0" layoutY="189.0" onKeyPressed="#irParaBtnEntrar" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
    </children>
 </AnchorPane>

@@ -7,6 +7,7 @@ package model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,8 +17,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "itemVenda")
 public class ItemVenda {
+
+
     
     @Id
+    @GeneratedValue
     private long id;
 
     @ManyToOne
@@ -28,9 +32,9 @@ public class ItemVenda {
     @JoinColumn(name = "idEstoque", nullable = false)
     private Estoque estoque;
 
-    @ManyToOne
-    @JoinColumn(name = "idSetor", nullable = false)
-    private Setor setor;
+//    @ManyToOne
+//    @JoinColumn(name = "idSetor", nullable = false)
+//    private Setor setor;
 
     @Column(nullable = false)
     private double quantidade;
@@ -42,11 +46,9 @@ public class ItemVenda {
         this.id = id;
         this.venda = venda;
         this.estoque = material;
-        this.setor = setor;
+        //this.setor = setor;
         this.quantidade = quantidade;
     }
-
-
 
     /**
      * @return the id
@@ -80,29 +82,29 @@ public class ItemVenda {
      * @return the material
      */
     public Estoque getMaterial() {
-        return estoque;
+        return getEstoque();
     }
 
     /**
      * @param material the material to set
      */
     public void setMaterial(Estoque material) {
-        this.estoque = material;
+        this.setEstoque(material);
     }
 
     /**
      * @return the setor
      */
-    public Setor getSetor() {
-        return setor;
-    }
-
-    /**
-     * @param setor the setor to set
-     */
-    public void setSetor(Setor setor) {
-        this.setor = setor;
-    }
+//    public Setor getSetor() {
+//        return setor;
+//    }
+//
+//    /**
+//     * @param setor the setor to set
+//     */
+//    public void setSetor(Setor setor) {
+//        this.setor = setor;
+//    }
 
     /**
      * @return the quantidade
@@ -116,6 +118,20 @@ public class ItemVenda {
      */
     public void setQuantidade(double quantidade) {
         this.quantidade = quantidade;
+    }
+    
+        /**
+     * @return the estoque
+     */
+    public Estoque getEstoque() {
+        return estoque;
+    }
+
+    /**
+     * @param estoque the estoque to set
+     */
+    public void setEstoque(Estoque estoque) {
+        this.estoque = estoque;
     }
     
 }

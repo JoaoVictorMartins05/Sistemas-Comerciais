@@ -137,7 +137,6 @@ public class MainController implements Initializable {
         } else if (frame.equals("/fxml/NovaTransferencia.fxml")) {
             NovaTransferenciaController controller = loader.getController();
             controller.setFuncionarioLogado(this.getFuncionario());
-
             controller.init();            
         } else if(frame.equals("/fxml/Transferencia.fxml")) {
             TransferenciaController controller = loader.getController();
@@ -145,6 +144,10 @@ public class MainController implements Initializable {
             controller.setPainelPrincipal(this.anchorpane);   
             
             controller.carregarComboBox();
+        } else if(frame.equals("/fxml/Venda.fxml")) {
+            VendaController controller = loader.getController();
+            controller.setFuncionarioLogado(this.getFuncionario()); 
+            controller.init();
         }
         this.anchorpane.setCenter(a);
     }

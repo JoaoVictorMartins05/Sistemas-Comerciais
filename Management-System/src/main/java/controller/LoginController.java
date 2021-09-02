@@ -24,6 +24,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -65,6 +67,7 @@ public class LoginController implements Initializable {
 
         emf = Persistence.createEntityManagerFactory("venda");
         em = emf.createEntityManager();
+        this.txtUsuario.requestFocus();
     }
 
     @FXML
@@ -156,6 +159,26 @@ public class LoginController implements Initializable {
         }
     }
 
+    
+    
+    
+    @FXML
+    void irParaBtnEntrar(KeyEvent event) throws Exception {
+        if (event.getCode() == KeyCode.ENTER) {
+            entrar();
+        }
+    }
+
+    @FXML
+    void irParaSenha(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            this.txtSenha.requestFocus();
+        }
+    }
+
+  
+    
+    
     /**
      * @return the funcionarios
      */

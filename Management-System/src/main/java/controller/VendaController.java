@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -23,6 +24,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,8 +33,12 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import model.Estoque;
 import model.Funcionario;
+import model.ItemTransferencia;
+import model.ItemVenda;
 import model.Material;
+import model.Transferencia;
 import model.Venda;
+import model.visualization.Carrinho;
 
 /**
  *
@@ -39,64 +46,26 @@ import model.Venda;
  */
 public class VendaController implements Initializable {
 
-    /**
-     * @return the estoque
-     */
-    public List<Estoque> getEstoque() {
-        return estoque;
-    }
-
-    /**
-     * @param estoque the estoque to set
-     */
-    public void setEstoque(List<Estoque> estoque) {
-        this.estoque = estoque;
-    }
-
-    /**
-     * @return the emf
-     */
-    public EntityManagerFactory getEmf() {
-        return emf;
-    }
-
-    /**
-     * @param emf the emf to set
-     */
-    public void setEmf(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-
-    /**
-     * @return the em
-     */
-    public EntityManager getEm() {
-        return em;
-    }
-
-    /**
-     * @param em the em to set
-     */
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
     @FXML
-    private TableView<?> tblVenda;
+    private TableView<Carrinho> tblVenda;
 
     @FXML
-    private TableColumn<?, ?> tblColumnCodigo;
+    private TableColumn<Carrinho, String> tblColumnCodigo;
 
     @FXML
-    private TableColumn<?, ?> tblColumnDescricao;
+    private TableColumn<Carrinho, String> tblColumnNome;
 
     @FXML
-    private TableColumn<?, ?> tblColumnQuantidade;
+    private TableColumn<Carrinho, String> tblColumnQuantidade;
 
     @FXML
-    private TableColumn<?, ?> tblColumnValor;
+    private TableColumn<Carrinho, String> tblColumnUnMedida;
 
     @FXML
-    private TableColumn<?, ?> tblColumnTotal;
+    private TableColumn<Carrinho, String> tblColumnValor;
+
+    @FXML
+    private TableColumn<Carrinho, String> tblColumnTotal;
 
     @FXML
     private Button btnCancelar;
@@ -127,11 +96,9 @@ public class VendaController implements Initializable {
 
     @FXML
     private Text edtQtdItens;
-    
-    
+
     @FXML
     private Button btnAdd;
-    
 
     private Venda venda;
     private List<Estoque> estoque;
@@ -142,58 +109,197 @@ public class VendaController implements Initializable {
     private int valor;
     private int quantidade;
     private double total;
-    
+    private int index;
+    private List<Carrinho> carrinhos;
+    private List<ItemVenda> itens;
+    private Funcionario funcionarioLogado;
+    private Date data;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Date data = new Date();
-        this.lblData.setText(data.toString());
+        this.setData(new Date());
+        this.getLblData().setText(this.getData().toString());
         preencheChoiceBox();
-        this.qtdItens = 0;
-        this.edtQuantidade.setText("0");
-        this.total = 0;
-        this.edtQtdItens.setText("0");
+        this.setQtdItens(0);
+        this.getEdtQuantidade().setText("0");
+        this.setTotal(0);
+        this.getEdtQtdItens().setText("0");      
+        this.itens = new ArrayList<>();
+        this.carrinhos = new ArrayList<>();
+        this.venda = new Venda();
+        //this.estoque = new ArrayList<>();
+    }
+    
+    public void init(){
         this.setEstoque(this.listar());
     }
 
-    
+    //quando aperta enter no cod do produto, valida e vai para o campo de quantidade
     @FXML
-    void add(ActionEvent event) {
-        edtCodProduto.setText(this.edtCodProduto.getText());
-        inserirElementoTabela();
-    }
-    
-    
-    private void inserirElementoTabela() {
-        for (int i = 0; i < this.estoque.size(); i++) {
-            if (this.edtCodProduto.getText()!= "") {
-                String aux = estoque.get(i).getMaterial().getNome() + " - " + estoque.get(i).getMaterial().getUnidadeMedida() + " - R$: " + estoque.get(i).getMaterial().getValor();
-                this.edtDescricao.setText(aux);
-                this.qtdItens += 1;
-                this.edtQtdItens.setText(Double.toString(qtdItens));
-                quantidade = Integer.parseInt(edtQuantidade.getText());
-                total += quantidade * estoque.get(i).getMaterial().getValor();
-                quantidade = 0;
-                this.edtQuantidade.setText("0");
-                edtCodProduto.setText("");
-                lblTotal.setText(Double.toString(total));
-                aux = "";
-            }else{
-                System.out.println("olá");
+    void add(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            String codAux = this.getEdtCodProduto().getText();
+            System.out.println("codInserido- " + codAux);
+            for (int i = 0; i < getEstoque().size(); i++) {
+
+                System.out.println("id- " + getEstoque().get(i).getMaterial().getId().toString());
+                System.out.println("qtd- " + getEstoque().get(i).getQuantidade());
+
+                if (codAux.equals(getEstoque().get(i).getMaterial().getId().toString())) {
+
+                    System.out.println("Flaggg1111");
+                    if (getEstoque().get(i).getQuantidade() > 0) {
+                        System.out.println("Flaggg222");
+                        //edtCodProduto.setText(this.edtCodProduto.getText());
+                        //inserirElementoTabela();
+                        String aux = getEstoque().get(i).getMaterial().getNome() + " - " + getEstoque().get(i).getMaterial().getUnidadeMedida() + " - R$: " + getEstoque().get(i).getMaterial().getValor();
+                        this.getEdtDescricao().setText(aux);
+                        this.setIndex(i);
+                        this.getEdtQuantidade().requestFocus();
+                        break;
+                    }
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Produto não possui Estoque!");
+                    alert.show();
+                } else if (i == getEstoque().size() - 1) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Produto Inválido!");
+                    alert.show();
+                }
             }
         }
     }
 
-//    private void atualizarTabela(List<Material> material) {
-//        //Definicao de qual campo com qual coluna do BD
-//        this.tblColumNome.setCellValueFactory(new PropertyValueFactory<Material, String>("nome"));
-//        this.tblColumCodigo.setCellValueFactory(new PropertyValueFactory<Material, String>("id"));
-//
-//        //Criar um observableCollection com os dados advindos do BD
-//        this.setMateriais(material);
-//        this.obsMateriais = FXCollections.observableArrayList(this.getMateriais());
-//        this.tblMaterial.setItems(obsMateriais);
-//    }
+    @FXML
+    void addTabela(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            if (getEstoque().get(getIndex()).getQuantidade() > Integer.parseInt(this.getEdtQuantidade().getText())) {
+                System.out.println("ADD TABELA");
+                adicionar();
+                this.edtCodProduto.setText("");
+                this.edtQuantidade.setText("");
+                this.getEdtCodProduto().requestFocus();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Produto não possui Estoque!");
+                alert.show();
+            }
+        }
+    }
+    
+    
+        @FXML
+    void finalizar(ActionEvent event) {       
+        this.venda.setData(new Date());
+        this.venda.setFormaPagamento(this.edtFormaPagamento.getValue());
+        this.venda.setFuncionario(this.funcionarioLogado);
+        this.venda.setSetor(this.funcionarioLogado.getSetor());
+        this.venda.setValorTotal(this.total);
+        this.venda.setDescricao("");
+        
+        setEmf(Persistence.createEntityManagerFactory("venda"));
+        setEm(getEmf().createEntityManager());
+        
+        em.getTransaction().begin();
+        em.merge(this.venda);
+
+        em.getTransaction().commit();
+
+        em.getTransaction().begin();
+        Query consulta = em.createNativeQuery("Select * from venda where data = (Select max(data) from venda)", Venda.class);
+        this.venda = (Venda) consulta.getResultList().get(0);
+
+        em.getTransaction().commit();
+
+        for (ItemVenda i : this.getItens()) {
+            i.setVenda(this.venda);
+
+            System.out.println("\n\n\n\n");
+            System.out.println(i.getEstoque().getMaterial().getNome() + "\n\n\n\n");
+            System.out.println(i.getVenda().getId());
+
+            em.getTransaction().begin();
+            em.persist(i);
+            em.getTransaction().commit();
+        }
+        emf.close();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Venda Realizada Com Sucesso");
+        alert.show();       
+    }
+    
+    
+
+    private void atualizarTabela() {
+        this.getTblColumnCodigo().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("codigoMaterial"));
+        this.getTblColumnNome().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("nomeMaterial"));
+        this.getTblColumnQuantidade().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("quantidade"));
+        this.getTblColumnTotal().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("valorTotal"));
+        this.getTblColumnUnMedida().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("unidadeMedidaMaterial"));
+        this.getTblColumnValor().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("valorMaterial"));
+
+        ObservableList obsCarrinhos = FXCollections.observableArrayList(this.getCarrinhos());
+
+        this.getTblVenda().setItems(this.getCarrinhos().isEmpty() ? null : obsCarrinhos);
+    }
+
+    private void adicionaMaterialNoCarrinho(Carrinho carrinho) {
+        for (Carrinho c : this.getCarrinhos()) {
+            if (c.getCodigoMaterial().equals(carrinho.getCodigoMaterial())) {
+                carrinho.setQuantidade(c.getQuantidade() + carrinho.getQuantidade());
+                carrinho.setValorTotal(carrinho.getQuantidade() * carrinho.getValorMaterial());
+                this.getCarrinhos().remove(c);
+                break;
+            }
+        }
+        this.getCarrinhos().add(carrinho);
+    }
+
+    public void adicionar() {
+        ItemVenda item = new ItemVenda();
+
+        if (this.validaCampos()) {
+            Material material = this.estoque.get(index).getMaterial();
+
+            item.setEstoque(this.estoque.get(index));
+            item.setQuantidade(Double.parseDouble(this.getEdtQuantidade().getText()));
+
+            if (!this.jaExisteItem(item)) {
+                this.getItens().add(item);
+            }
+
+            Carrinho carrinho = this.preencheCarrinho(material, item);
+
+            this.adicionaMaterialNoCarrinho(carrinho);
+            this.lblTotal.setText(Double.toString(this.total));
+                            
+        }
+        this.atualizarTabela();
+    }
+
+    private Carrinho preencheCarrinho(Material material, ItemVenda item) {
+        Carrinho carrinho = new Carrinho();
+
+        carrinho.setNomeMaterial(material.getNome());
+        carrinho.setCodigoMaterial(material.getId());
+        carrinho.setQuantidade(item.getQuantidade());
+        carrinho.setUnidadeMedidaMaterial(material.getUnidadeMedida());
+        carrinho.setValorMaterial(material.getValor());
+        carrinho.setValorTotal(material.getValor() * item.getQuantidade());
+        this.total += carrinho.getValorTotal();
+        return carrinho;
+    }
+
+    private boolean jaExisteItem(ItemVenda item) {
+        for (ItemVenda i : this.getItens()) {
+            if (item.getEstoque().equals(i.getEstoque())) {
+                i.setQuantidade(i.getQuantidade() + item.getQuantidade());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean validaCampos() {
+        return true;
+    }
 
     private void preencheChoiceBox() {
         List<String> unidades = new ArrayList<>();
@@ -205,13 +311,35 @@ public class VendaController implements Initializable {
         ObservableList obsUnidades = FXCollections.observableArrayList(unidades);
 
         //System.out.println(obsUnidades);
-        this.edtFormaPagamento.setItems(obsUnidades);
-        this.edtFormaPagamento.setValue(this.edtFormaPagamento.getItems().get(0));
+        this.getEdtFormaPagamento().setItems(obsUnidades);
+        this.getEdtFormaPagamento().setValue(this.getEdtFormaPagamento().getItems().get(0));
     }
 
     public void init(Funcionario funcionario) {
-        this.venda.setFuncionario(funcionario);
+        this.getVenda().setFuncionario(funcionario);
         this.setEstoque(this.listar());
+        this.edtCodProduto.requestFocus();
+    }
+    
+   @FXML
+    void remover(ActionEvent event) {
+        Carrinho carrinho = this.tblVenda.getSelectionModel().getSelectedItem();
+
+        if (carrinho != null) {
+            this.total -= carrinho.getValorTotal();
+            this.lblTotal.setText(Double.toString(this.total));
+            for (ItemVenda item : this.getItens()) {
+                if(item.getEstoque().getMaterial().getId().equals(carrinho.getCodigoMaterial())) {
+                    this.getItens().remove(item);
+                    break;
+                }
+            }
+            this.getCarrinhos().remove(carrinho);
+            this.atualizarTabela();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhum Material Selecionado");
+            alert.show();
+        }
     }
 
     public List<Estoque> listar() {
@@ -220,7 +348,7 @@ public class VendaController implements Initializable {
 
         //System.out.println("\n\n\n" + this.getFuncionarioLogado().getNome() + "\n\n\n");
         getEm().getTransaction().begin();
-        Query consulta = getEm().createNativeQuery("SELECT * FROM Estoque WHERE Estoque.idSetor = " + 2, Estoque.class);
+        Query consulta = getEm().createNativeQuery("SELECT * FROM Estoque WHERE Estoque.idSetor = " + this.funcionarioLogado.getSetor().getId(), Estoque.class);
         List<Estoque> estoques = consulta.getResultList();
 
         getEm().getTransaction().commit();
@@ -234,97 +362,101 @@ public class VendaController implements Initializable {
 
     }
 
-    @FXML
-    void excluir(ActionEvent event) {
-
-    }
-
-    @FXML
-    void finalizar(ActionEvent event) {
-
-    }
-
     /**
      * @return the tblVenda
      */
-    public TableView<?> getTblVenda() {
+    public TableView<Carrinho> getTblVenda() {
         return tblVenda;
     }
 
     /**
      * @param tblVenda the tblVenda to set
      */
-    public void setTblVenda(TableView<?> tblVenda) {
+    public void setTblVenda(TableView<Carrinho> tblVenda) {
         this.tblVenda = tblVenda;
     }
 
     /**
      * @return the tblColumnCodigo
      */
-    public TableColumn<?, ?> getTblColumnCodigo() {
+    public TableColumn<Carrinho, String> getTblColumnCodigo() {
         return tblColumnCodigo;
     }
 
     /**
      * @param tblColumnCodigo the tblColumnCodigo to set
      */
-    public void setTblColumnCodigo(TableColumn<?, ?> tblColumnCodigo) {
+    public void setTblColumnCodigo(TableColumn<Carrinho, String> tblColumnCodigo) {
         this.tblColumnCodigo = tblColumnCodigo;
     }
 
     /**
-     * @return the tblColumnDescricao
+     * @return the tblColumnNome
      */
-    public TableColumn<?, ?> getTblColumnDescricao() {
-        return tblColumnDescricao;
+    public TableColumn<Carrinho, String> getTblColumnNome() {
+        return tblColumnNome;
     }
 
     /**
-     * @param tblColumnDescricao the tblColumnDescricao to set
+     * @param tblColumnNome the tblColumnNome to set
      */
-    public void setTblColumnDescricao(TableColumn<?, ?> tblColumnDescricao) {
-        this.tblColumnDescricao = tblColumnDescricao;
+    public void setTblColumnNome(TableColumn<Carrinho, String> tblColumnNome) {
+        this.tblColumnNome = tblColumnNome;
     }
 
     /**
      * @return the tblColumnQuantidade
      */
-    public TableColumn<?, ?> getTblColumnQuantidade() {
+    public TableColumn<Carrinho, String> getTblColumnQuantidade() {
         return tblColumnQuantidade;
     }
 
     /**
      * @param tblColumnQuantidade the tblColumnQuantidade to set
      */
-    public void setTblColumnQuantidade(TableColumn<?, ?> tblColumnQuantidade) {
+    public void setTblColumnQuantidade(TableColumn<Carrinho, String> tblColumnQuantidade) {
         this.tblColumnQuantidade = tblColumnQuantidade;
+    }
+
+    /**
+     * @return the tblColumnUnMedida
+     */
+    public TableColumn<Carrinho, String> getTblColumnUnMedida() {
+        return tblColumnUnMedida;
+    }
+
+    /**
+     * @param tblColumnUnMedida the tblColumnUnMedida to set
+     */
+    public void setTblColumnUnMedida(TableColumn<Carrinho, String> tblColumnUnMedida) {
+        this.tblColumnUnMedida = tblColumnUnMedida;
     }
 
     /**
      * @return the tblColumnValor
      */
-    public TableColumn<?, ?> getTblColumnValor() {
+    public TableColumn<Carrinho, String> getTblColumnValor() {
         return tblColumnValor;
     }
 
     /**
      * @param tblColumnValor the tblColumnValor to set
      */
-    public void setTblColumnValor(TableColumn<?, ?> tblColumnValor) {
+    public void setTblColumnValor(TableColumn<Carrinho, String> tblColumnValor) {
         this.tblColumnValor = tblColumnValor;
     }
 
     /**
      * @return the tblColumnTotal
      */
-    public TableColumn<?, ?> getTblColumnTotal() {
+    public TableColumn<Carrinho, String> getTblColumnTotal() {
         return tblColumnTotal;
     }
 
     /**
      * @param tblColumnTotal the tblColumnTotal to set
      */
-    public void setTblColumnTotal(TableColumn<?, ?> tblColumnTotal) {
+    public void setTblColumnTotal(TableColumn<Carrinho, String> tblColumnTotal) {
         this.tblColumnTotal = tblColumnTotal;
     }
 
@@ -387,7 +519,7 @@ public class VendaController implements Initializable {
     /**
      * @return the edtFormaPagamento
      */
-    public ComboBox<?> getEdtFormaPagamento() {
+    public ComboBox<String> getEdtFormaPagamento() {
         return edtFormaPagamento;
     }
 
@@ -454,4 +586,213 @@ public class VendaController implements Initializable {
         this.lblData = lblData;
     }
 
+    /**
+     * @return the edtQtdItens
+     */
+    public Text getEdtQtdItens() {
+        return edtQtdItens;
+    }
+
+    /**
+     * @param edtQtdItens the edtQtdItens to set
+     */
+    public void setEdtQtdItens(Text edtQtdItens) {
+        this.edtQtdItens = edtQtdItens;
+    }
+
+    /**
+     * @return the btnAdd
+     */
+    public Button getBtnAdd() {
+        return btnAdd;
+    }
+
+    /**
+     * @param btnAdd the btnAdd to set
+     */
+    public void setBtnAdd(Button btnAdd) {
+        this.btnAdd = btnAdd;
+    }
+
+    /**
+     * @return the venda
+     */
+    public Venda getVenda() {
+        return venda;
+    }
+
+    /**
+     * @param venda the venda to set
+     */
+    public void setVenda(Venda venda) {
+        this.venda = venda;
+    }
+
+    /**
+     * @return the qtdItens
+     */
+    public int getQtdItens() {
+        return qtdItens;
+    }
+
+    /**
+     * @param qtdItens the qtdItens to set
+     */
+    public void setQtdItens(int qtdItens) {
+        this.qtdItens = qtdItens;
+    }
+
+    /**
+     * @return the valor
+     */
+    public int getValor() {
+        return valor;
+    }
+
+    /**
+     * @param valor the valor to set
+     */
+    public void setValor(int valor) {
+        this.valor = valor;
+    }
+
+    /**
+     * @return the quantidade
+     */
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    /**
+     * @param quantidade the quantidade to set
+     */
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    /**
+     * @return the total
+     */
+    public double getTotal() {
+        return total;
+    }
+
+    /**
+     * @param total the total to set
+     */
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    /**
+     * @return the index
+     */
+    public int getIndex() {
+        return index;
+    }
+
+    /**
+     * @param index the index to set
+     */
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    /**
+     * @return the carrinhos
+     */
+    public List<Carrinho> getCarrinhos() {
+        return carrinhos;
+    }
+
+    /**
+     * @param carrinhos the carrinhos to set
+     */
+    public void setCarrinhos(List<Carrinho> carrinhos) {
+        this.carrinhos = carrinhos;
+    }
+
+    /**
+     * @return the estoque
+     */
+    public List<Estoque> getEstoque() {
+        return estoque;
+    }
+
+    /**
+     * @param estoque the estoque to set
+     */
+    public void setEstoque(List<Estoque> estoque) {
+        this.estoque = estoque;
+    }
+
+    /**
+     * @return the emf
+     */
+    public EntityManagerFactory getEmf() {
+        return emf;
+    }
+
+    /**
+     * @param emf the emf to set
+     */
+    public void setEmf(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+
+    /**
+     * @return the em
+     */
+    public EntityManager getEm() {
+        return em;
+    }
+
+    /**
+     * @param em the em to set
+     */
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+
+    /**
+     * @return the itens
+     */
+    public List<ItemVenda> getItens() {
+        return itens;
+    }
+
+    /**
+     * @param itens the itens to set
+     */
+    public void setItens(List<ItemVenda> itens) {
+        this.itens = itens;
+    }
+
+    /**
+     * @return the funcionarioLogado
+     */
+    public Funcionario getFuncionarioLogado() {
+        return funcionarioLogado;
+    }
+
+    /**
+     * @param funcionarioLogado the funcionarioLogado to set
+     */
+    public void setFuncionarioLogado(Funcionario funcionarioLogado) {
+        this.funcionarioLogado = funcionarioLogado;
+    }
+
+    /**
+     * @return the data
+     */
+    public Date getData() {
+        return data;
+    }
+
+    /**
+     * @param data the data to set
+     */
+    public void setData(Date data) {
+        this.data = data;
+    }
 }

@@ -47,11 +47,7 @@ public class ItemTransferencia {
         this.quantidade = quantidade;
     }
     
-    
-    
-    
-    
-    
+  
        /**
      * @return the id
      */
