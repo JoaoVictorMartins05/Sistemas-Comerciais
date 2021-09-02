@@ -17,7 +17,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VendaController">
    <children>
-      <TableView fx:id="tblVenda" layoutY="229.0" prefHeight="346.0" prefWidth="1131.0" style="-fx-background-color: #deea94;" AnchorPane.bottomAnchor="185.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="229.0">
+      <TableView fx:id="tblVenda" layoutY="229.0" prefHeight="346.0" prefWidth="1131.0" style="-fx-background-color: #deea94;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="229.0">
          <columns>
             <TableColumn fx:id="tblColumnCodigo" prefWidth="165.0" text="Código" />
             <TableColumn fx:id="tblColumnNome" prefWidth="362.0" text="Nome" />
@@ -90,9 +90,9 @@
          <buttons>
             <Button mnemonicParsing="false" onAction="#remover" prefHeight="45.0" prefWidth="125.0" text="EXCLUIR ITEM" textFill="#70751d">
                <graphic>
-                  <ImageView fx:id="btnExcluir" nodeOrientation="RIGHT_TO_LEFT">
+                  <ImageView>
                      <image>
-                        <Image url="@../../../../../../../projeto-javai-master/projetoVenda2020/src/main/resources/images/cadDelete.png" />
+                        <Image url="@../images/cadDelete.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -101,7 +101,7 @@
                <graphic>
                   <ImageView>
                      <image>
-                        <Image url="@../../../../../../../projeto-javai-master/projetoVenda2020/src/main/resources/images/cadCancel.png" />
+                        <Image url="@../images/cadCancel.png" />
                      </image>
                   </ImageView>
                </graphic>

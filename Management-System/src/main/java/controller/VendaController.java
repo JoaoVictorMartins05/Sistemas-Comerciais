@@ -359,9 +359,22 @@ public class VendaController implements Initializable {
 
     @FXML
     void cancelar(ActionEvent event) {
-
+        this.limparCampos();
     }
 
+      
+    void limparCampos(){
+        this.venda = new Venda();
+        this.total = 0;
+        this.edtCodProduto.setText("");
+        this.edtQtdItens.setText("");
+        this.edtQuantidade.setText("");
+        this.data = new Date();
+        this.carrinhos = new ArrayList<>();
+        this.tblVenda.setItems(null);
+    }
+    
+    
     /**
      * @return the tblVenda
      */
