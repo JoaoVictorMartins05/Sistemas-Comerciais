@@ -127,6 +127,7 @@ public class VendaController implements Initializable {
         this.itens = new ArrayList<>();
         this.carrinhos = new ArrayList<>();
         this.venda = new Venda();
+        this.qtdItens = 0;
         //this.estoque = new ArrayList<>();
     }
     
@@ -269,7 +270,8 @@ public class VendaController implements Initializable {
 
             this.adicionaMaterialNoCarrinho(carrinho);
             this.lblTotal.setText(Double.toString(this.total));
-                            
+            this.qtdItens+=1;
+            this.edtQtdItens.setText(Integer.toString(this.qtdItens));
         }
         this.atualizarTabela();
     }
@@ -321,7 +323,7 @@ public class VendaController implements Initializable {
         this.edtCodProduto.requestFocus();
     }
     
-   @FXML
+    @FXML
     void remover(ActionEvent event) {
         Carrinho carrinho = this.tblVenda.getSelectionModel().getSelectedItem();
 
@@ -336,6 +338,8 @@ public class VendaController implements Initializable {
             }
             this.getCarrinhos().remove(carrinho);
             this.atualizarTabela();
+            this.qtdItens-=1;
+            this.edtQtdItens.setText(Integer.toString(this.qtdItens));
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Nenhum Material Selecionado");
             alert.show();
@@ -372,6 +376,9 @@ public class VendaController implements Initializable {
         this.data = new Date();
         this.carrinhos = new ArrayList<>();
         this.tblVenda.setItems(null);
+        this.edtQtdItens.setText("0");
+        this.lblTotal.setText("0");
+        this.lblData.setText(data.toString());
     }
     
     
