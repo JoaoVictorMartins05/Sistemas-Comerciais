@@ -8,12 +8,14 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="542.0" prefWidth="905.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovaTransferenciaController">
+<AnchorPane id="AnchorPane" prefHeight="536.0" prefWidth="905.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovaTransferenciaController">
    <children>
-      <TableView fx:id="tblCarrinho" layoutX="29.0" layoutY="158.0" prefHeight="166.0" prefWidth="653.0" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="158.0">
+      <TableView fx:id="tblCarrinho" layoutX="29.0" layoutY="160.0" prefHeight="166.0" prefWidth="653.0" style="-fx-background-color: #deea94;" AnchorPane.bottomAnchor="138.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0">
         <columns>
           <TableColumn fx:id="colunaId" prefWidth="75.0" text="Codigo" />
           <TableColumn fx:id="colunaNome" prefWidth="75.0" text="Nome" />
@@ -23,35 +25,61 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Button fx:id="btnRemover" layoutX="604.0" layoutY="324.0" mnemonicParsing="false" onAction="#remover" prefHeight="26.0" prefWidth="90.0" text="Remover" AnchorPane.bottomAnchor="114.0" AnchorPane.rightAnchor="30.0" />
-      <ButtonBar layoutX="332.0" layoutY="396.0" prefHeight="40.0" prefWidth="351.0" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="29.0">
+      <Button fx:id="btnRemover" layoutX="801.0" layoutY="411.0" mnemonicParsing="false" onAction="#remover" prefHeight="26.0" prefWidth="90.0" text="Remover" AnchorPane.bottomAnchor="104.0" AnchorPane.rightAnchor="14.0">
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../images/cadDelete.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <ButtonBar layoutX="540.0" layoutY="503.0" prefHeight="40.0" prefWidth="351.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="14.0">
         <buttons>
-            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" prefHeight="26.0" prefWidth="187.0" text="Cancelar" />
-            <Button fx:id="btnFinalizar" mnemonicParsing="false" onAction="#finalizar" prefHeight="26.0" prefWidth="187.0" text="Finalizar" />
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" prefHeight="26.0" prefWidth="187.0" text="Cancelar">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../images/cadCancel.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnFinalizar" mnemonicParsing="false" onAction="#finalizar" prefHeight="26.0" prefWidth="187.0" text="Finalizar">
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="27.0">
+                     <image>
+                        <Image url="@../images/ok_image.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
         </buttons>
       </ButtonBar>
-      <AnchorPane prefHeight="148.0" prefWidth="905.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane prefHeight="162.0" prefWidth="905.0" style="-fx-background-color: #99e599;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="372.0" layoutY="14.0" text="Transferencia" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="372.0" AnchorPane.topAnchor="14.0">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="372.0" layoutY="14.0" text="Transferencia" textFill="#d00e0e" textOverrun="CENTER_WORD_ELLIPSIS" AnchorPane.leftAnchor="372.0" AnchorPane.topAnchor="14.0">
                <font>
-                  <Font size="30.0" />
+                  <Font name="System Bold" size="30.0" />
                </font>
             </Label>
-            <ComboBox fx:id="edtMaterial" layoutX="340.0" layoutY="84.0" maxWidth="311.0" prefHeight="26.0" prefWidth="311.0">
+            <ComboBox fx:id="edtMaterial" layoutX="340.0" layoutY="121.0" maxWidth="311.0" prefHeight="26.0" prefWidth="311.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ComboBox>
-            <Label layoutX="27.0" layoutY="66.0" prefHeight="3.0" prefWidth="82.0" text="Destinatario" />
-            <ComboBox fx:id="edtDestinatario" layoutX="27.0" layoutY="84.0" maxWidth="531.0" prefHeight="26.0" prefWidth="292.0" AnchorPane.leftAnchor="27.0">
+            <Label layoutX="27.0" layoutY="102.0" prefHeight="3.0" prefWidth="82.0" text="Destinatario" />
+            <ComboBox fx:id="edtDestinatario" layoutX="27.0" layoutY="121.0" maxWidth="531.0" prefHeight="26.0" prefWidth="292.0" AnchorPane.leftAnchor="27.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ComboBox>
-            <Label layoutX="340.0" layoutY="65.0" text="Material" />
-            <TextField fx:id="edtQuantidade" layoutX="673.0" layoutY="84.0" maxWidth="110.0" prefHeight="26.0" prefWidth="90.0" />
-            <Label layoutX="673.0" layoutY="66.0" text="Quantidade" />
-            <Button fx:id="btnadicionar" layoutX="590.0" layoutY="84.0" maxWidth="110.0" mnemonicParsing="false" onAction="#adicionar" prefHeight="26.0" prefWidth="90.0" text="Adicionar" AnchorPane.rightAnchor="31.0" />
+            <Label layoutX="340.0" layoutY="102.0" text="Material" />
+            <TextField fx:id="edtQuantidade" layoutX="673.0" layoutY="121.0" maxWidth="110.0" prefHeight="26.0" prefWidth="90.0" />
+            <Label layoutX="673.0" layoutY="102.0" text="Quantidade" />
+            <Button fx:id="btnadicionar" layoutX="786.0" layoutY="121.0" maxWidth="110.0" mnemonicParsing="false" onAction="#adicionar" prefHeight="26.0" prefWidth="90.0" text="Adicionar" AnchorPane.leftAnchor="786.0" />
+            <ImageView fitHeight="162.0" fitWidth="154.0" layoutX="786.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <image>
+                  <Image url="@../images/logo-if.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>

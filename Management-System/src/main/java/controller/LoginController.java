@@ -58,15 +58,14 @@ public class LoginController implements Initializable {
     private EntityManagerFactory emf;
     private EntityManager em;
     
-    @FXML
-    private ImageView gifLoading;
+
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.gifLoading.setVisible(false);
+        
         this.setFuncionarios(new ArrayList<>());
         this.setController(new FuncionarioController());
 
@@ -77,7 +76,7 @@ public class LoginController implements Initializable {
 
     @FXML
     public void entrar() throws IOException, Exception {
-        this.gifLoading.setVisible(true);
+
         if (this.validaCampos()) {
             String usuario = this.getTxtUsuario().getText();
             String senha = this.getTxtSenha().getText();
@@ -116,7 +115,6 @@ public class LoginController implements Initializable {
             if (!flag) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Usuário e senha inválido");
                 alert.show();
-                this.gifLoading.setVisible(false);
             }
         }
         //vai sempre mostrar a tela (logar) pq ainda n tem funcionario cadastrado para logar no sistema

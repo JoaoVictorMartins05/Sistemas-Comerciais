@@ -10,19 +10,21 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MaterialController">
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="489.0" prefWidth="797.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MaterialController">
    <children>
       <SplitPane dividerPositions="0.5846153846153846" prefHeight="472.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="344.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="344.0" style="-fx-background-color: #99e599;">
                <children>
-                  <TableView fx:id="tblMaterial" layoutX="-2.0" prefHeight="394.0" prefWidth="435.0" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="tblMaterial" layoutX="-2.0" prefHeight="394.0" prefWidth="435.0" style="-fx-background-color: #deea94;" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
                      <columns>
                         <TableColumn fx:id="tblColumCodigo" prefWidth="75.0" text="Código" />
                         <TableColumn fx:id="tblColumNome" prefWidth="75.0" text="Nome" />
@@ -35,10 +37,13 @@
                   <Label layoutX="25.0" layoutY="421.0" text="Buscar:" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="25.0" />
                </children>
             </AnchorPane>
-            <AnchorPane minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="470.0" prefWidth="487.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="483.0" prefWidth="339.0">
                <children>
-                  <TextArea fx:id="lblDescricao" layoutX="9.0" layoutY="296.0" prefHeight="100.0" prefWidth="293.0" text="Material Teste. &#10;&#10;" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" text="Detalhes do Material" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+                  <TextArea fx:id="lblDescricao" layoutX="9.0" layoutY="296.0" prefHeight="100.0" prefWidth="293.0" style="-fx-background-color: #99e599;" text="&#10;" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="296.0">
+                     <font>
+                        <Font name="System Bold" size="25.0" />
+                     </font></TextArea>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" text="Detalhes do Material" textAlignment="CENTER" textFill="#bf1b1b" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="148.0" AnchorPane.topAnchor="14.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -56,58 +61,106 @@
                         <RowConstraints maxHeight="176.0" minHeight="10.0" prefHeight="35.0" valignment="TOP" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label prefHeight="73.0" prefWidth="151.0" text="Nome:" GridPane.rowIndex="1">
+                        <Label prefHeight="73.0" prefWidth="151.0" text="Nome:" textFill="#d02727" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
                         </Label>
-                        <Label prefHeight="111.0" prefWidth="151.0" text="Unidade:" GridPane.rowIndex="2">
+                        <Label prefHeight="111.0" prefWidth="151.0" text="Unidade:" textFill="#bf3434" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
                         </Label>
-                        <Label prefHeight="114.0" prefWidth="151.0" text="Valor unitário:" GridPane.rowIndex="3">
+                        <Label prefHeight="114.0" prefWidth="151.0" text="Valor unitário:" textFill="#b23838" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
                         </Label>
-                        <Label prefHeight="198.0" prefWidth="141.0" text="Descriçao" GridPane.rowIndex="4">
+                        <Label prefHeight="198.0" prefWidth="141.0" text="Descriçao" textFill="#bc2727" GridPane.rowIndex="4">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
                         </Label>
-                        <Label prefHeight="61.0" prefWidth="152.0" text="Código:" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                        <Label prefHeight="61.0" prefWidth="152.0" text="Código:" textFill="#d72d2d" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
                         </Label>
-                        <Label fx:id="lblValor" prefHeight="73.0" prefWidth="259.0" text="R$12,00" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label fx:id="lblUnidade" prefHeight="73.0" prefWidth="206.0" text="Quilo(KG)" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label fx:id="lblNome" prefHeight="74.0" prefWidth="227.0" text="Queijo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="lblValor" prefHeight="73.0" prefWidth="259.0" text="R$12,00" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
+                        <Label fx:id="lblUnidade" prefHeight="73.0" prefWidth="206.0" text="Quilo(KG)" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
+                        <Label fx:id="lblNome" prefHeight="74.0" prefWidth="227.0" text="Queijo" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
                         <Label prefHeight="74.0" prefWidth="151.0" GridPane.columnIndex="1" />
-                        <Label fx:id="lblId" prefHeight="74.0" prefWidth="227.0" text="1234" GridPane.columnIndex="1" />
+                        <Label fx:id="lblId" prefHeight="74.0" prefWidth="227.0" text="1234" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
                      </children>
                   </GridPane>
-                  <ButtonBar buttonMinWidth="50.0" layoutX="11.0" layoutY="415.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="244.0" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="-10.0">
+                  <ButtonBar buttonMinWidth="50.0" layoutX="23.0" layoutY="432.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="27.0" prefWidth="312.0" AnchorPane.bottomAnchor="27.0" AnchorPane.rightAnchor="-8.0">
                      <buttons>
-                        <Button minWidth="60.0" mnemonicParsing="false" onAction="#editar" prefHeight="26.0" prefWidth="167.0" text="Editar" />
-                        <Button minWidth="34.0" mnemonicParsing="false" onAction="#adicionar" prefHeight="26.0" text="Adicionar" />
-                        <Button mnemonicParsing="false" onAction="#remover" text="Remover" />
+                        <Button minWidth="60.0" mnemonicParsing="false" onAction="#editar" prefHeight="26.0" prefWidth="167.0" text="Editar">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@../images/cadEdit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button minWidth="34.0" mnemonicParsing="false" onAction="#adicionar" prefHeight="26.0" text="Adicionar">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@../images/cadNovo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button mnemonicParsing="false" onAction="#remover" text="Remover">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@../images/cadDelete.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
                      </buttons>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -116,6 +169,11 @@
                         <Insets />
                      </opaqueInsets>
                   </ButtonBar>
+                  <ImageView fitHeight="129.0" fitWidth="151.0" layoutX="201.0" AnchorPane.bottomAnchor="358.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <image>
+                        <Image url="@../images/logo-if.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </items>

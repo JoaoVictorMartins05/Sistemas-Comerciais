@@ -4,25 +4,53 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="313.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovoMaterialController">
    <children>
-      <Label layoutX="34.0" layoutY="15.0" text="Adicionar Material">
+      <Label layoutX="87.0" layoutY="14.0" text="Adicionar Material" textFill="#f20606">
          <font>
-            <Font size="18.0" />
+            <Font size="30.0" />
          </font>
       </Label>
-      <Label layoutX="36.0" layoutY="224.0" text="Descricao" />
-      <Label layoutX="36.0" layoutY="174.0" text="Valor" />
-      <Label layoutX="36.0" layoutY="123.0" text="Unidade" />
-      <Label layoutX="36.0" layoutY="74.0" text="Nome" />
-      <TextField fx:id="edtNome" layoutX="136.0" layoutY="69.0" prefHeight="26.0" prefWidth="227.0" />
-      <TextField fx:id="edtValor" layoutX="136.0" layoutY="169.0" prefHeight="26.0" prefWidth="227.0" />
-      <TextField fx:id="edtDescricao" layoutX="136.0" layoutY="219.0" prefHeight="26.0" prefWidth="227.0" />
-      <Button layoutX="271.0" layoutY="276.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
-      <Button layoutX="160.0" layoutY="276.0" mnemonicParsing="false" onAction="#confirmar" text="Confirmar" />
-      <ComboBox fx:id="edtUnidadeMedida" layoutX="134.0" layoutY="118.0" prefHeight="26.0" prefWidth="227.0" />
+      <Label layoutX="36.0" layoutY="224.0" text="Descricao">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font></Label>
+      <Label layoutX="36.0" layoutY="174.0" text="Valor">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font></Label>
+      <Label layoutX="36.0" layoutY="123.0" text="Unidade">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font></Label>
+      <Label layoutX="36.0" layoutY="74.0" text="Nome">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font></Label>
+      <TextField fx:id="edtNome" layoutX="136.0" layoutY="69.0" prefHeight="26.0" prefWidth="227.0" style="-fx-background-color: #deea94;" />
+      <TextField fx:id="edtValor" layoutX="136.0" layoutY="169.0" prefHeight="26.0" prefWidth="227.0" style="-fx-background-color: #deea94;" />
+      <TextField fx:id="edtDescricao" layoutX="136.0" layoutY="219.0" prefHeight="26.0" prefWidth="227.0" style="-fx-background-color: #deea94;" />
+      <Button layoutX="271.0" layoutY="276.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@../images/cadCancel.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button layoutX="160.0" layoutY="276.0" mnemonicParsing="false" onAction="#confirmar" text="Confirmar">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="29.0">
+               <image>
+                  <Image url="@../images/ok_image.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <ComboBox fx:id="edtUnidadeMedida" layoutX="134.0" layoutY="118.0" prefHeight="26.0" prefWidth="227.0" style="-fx-background-color: #deea94;" />
    </children>
 </AnchorPane>

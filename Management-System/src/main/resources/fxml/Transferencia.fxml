@@ -10,19 +10,21 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TransferenciaController">
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="551.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TransferenciaController">
    <children>
       <SplitPane dividerPositions="0.5846153846153846" prefHeight="472.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <AnchorPane fx:id="comboFiltrarTransferencias" minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="344.0">
+            <AnchorPane fx:id="comboFiltrarTransferencias" minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="344.0" style="-fx-background-color: #99e599;">
                <children>
-                  <TableView fx:id="tblTransferencia" layoutX="-2.0" prefHeight="394.0" prefWidth="435.0" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="tblTransferencia" layoutX="-2.0" prefHeight="394.0" prefWidth="435.0" style="-fx-background-color: #deea94;" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
                      <columns>
                         <TableColumn fx:id="tblColumCodigo" prefWidth="75.0" text="Código" />
                         <TableColumn fx:id="tblColumStatus" prefWidth="75.0" text="Status" />
@@ -35,18 +37,21 @@
                   <ComboBox fx:id="edtFiltros" layoutX="91.0" layoutY="417.0" prefHeight="26.0" prefWidth="198.0" AnchorPane.bottomAnchor="27.0" />
                </children>
             </AnchorPane>
-            <AnchorPane minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="470.0" prefWidth="487.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="492.0" prefWidth="377.0">
                <children>
-                  <TextArea fx:id="lblDescricao" layoutX="9.0" layoutY="296.0" prefHeight="100.0" prefWidth="293.0" text="Material Inutil, igual agua de salsicha. &#10;&#10;Serve pa porra nenhuma" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" text="Deatalhes do Material" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
+                  <TextArea fx:id="lblDescricao" editable="false" layoutX="38.0" layoutY="294.0" prefHeight="100.0" prefWidth="293.0" style="-fx-background-color: #99e599;" text="&#10;&#10;" AnchorPane.bottomAnchor="155.0" AnchorPane.leftAnchor="38.0" AnchorPane.rightAnchor="37.0" AnchorPane.topAnchor="294.0">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="System Bold" size="16.0" />
+                     </font></TextArea>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" text="Detalhes do Material" textAlignment="CENTER" textFill="#a81a1a" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="137.0" AnchorPane.topAnchor="14.0">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
                      </font>
                   </Label>
-                  <GridPane alignment="CENTER" layoutX="57.0" layoutY="59.0" prefHeight="235.0" prefWidth="308.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="-3.0" AnchorPane.topAnchor="59.0">
+                  <GridPane alignment="CENTER" layoutX="57.0" layoutY="59.0" prefHeight="235.0" prefWidth="308.0" AnchorPane.leftAnchor="3.0" AnchorPane.topAnchor="59.0">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="181.0" minWidth="10.0" prefWidth="142.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="166.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.0" minWidth="10.0" prefWidth="186.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="123.0" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints maxHeight="89.0" minHeight="-Infinity" prefHeight="31.0" vgrow="SOMETIMES" />
@@ -58,69 +63,104 @@
                         <RowConstraints maxHeight="176.0" minHeight="10.0" prefHeight="35.0" valignment="TOP" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label prefHeight="73.0" prefWidth="151.0" text="Funcionario:" GridPane.rowIndex="1">
+                        <Label prefHeight="73.0" prefWidth="151.0" text="Funcionario:" textFill="#a81a1a" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font name="System Bold" size="21.0" />
+                           </font>
                         </Label>
-                        <Label prefHeight="111.0" prefWidth="151.0" text="Setor Destino:" GridPane.rowIndex="3">
+                        <Label prefHeight="111.0" prefWidth="151.0" text="Setor Destino:" textFill="#a81a1a" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font name="System Bold" size="21.0" />
+                           </font>
                         </Label>
-                        <Label prefHeight="114.0" prefWidth="151.0" text="Data:" GridPane.rowIndex="4">
+                        <Label prefHeight="114.0" prefWidth="151.0" text="Data:" textFill="#a81a1a" GridPane.rowIndex="4">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font name="System Bold" size="21.0" />
+                           </font>
                         </Label>
-                        <Label prefHeight="198.0" prefWidth="141.0" text="Descriçao" GridPane.rowIndex="6">
+                        <Label prefHeight="198.0" prefWidth="141.0" text="Descriçao:" textFill="#a81a1a" GridPane.rowIndex="6">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font name="System Bold" size="21.0" />
+                           </font>
                         </Label>
-                        <Label prefHeight="61.0" prefWidth="152.0" text="Código:" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                        <Label prefHeight="61.0" prefWidth="152.0" text="Código:" textFill="#a81a1a" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font name="System Bold" size="21.0" />
+                           </font>
                         </Label>
                         <Label fx:id="lblData" prefHeight="73.0" prefWidth="259.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Label fx:id="lblSetorDestinatario" prefHeight="73.0" prefWidth="206.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label fx:id="lblFuncionario" prefHeight="74.0" prefWidth="227.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label prefHeight="74.0" prefWidth="151.0" GridPane.columnIndex="1" />
                         <Label fx:id="lblId" prefHeight="74.0" prefWidth="227.0" GridPane.columnIndex="1" />
-                        <Label prefHeight="36.0" prefWidth="144.0" text="Status:" GridPane.rowIndex="5">
+                        <Label prefHeight="36.0" prefWidth="144.0" text="Status:" textFill="#a81a1a" GridPane.rowIndex="5">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font name="System Bold" size="21.0" />
+                           </font>
                         </Label>
                         <Label fx:id="lblStatus" prefHeight="36.0" prefWidth="165.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Label text="Setor de Origem:" GridPane.rowIndex="2">
+                        <Label text="Setor de Origem:" textFill="#a81a1a" GridPane.rowIndex="2">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <font>
+                              <Font name="System Bold" size="21.0" />
+                           </font>
                         </Label>
                         <Label fx:id="lblSetorOrigem" prefHeight="32.0" prefWidth="166.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
-                  <ButtonBar buttonMinWidth="50.0" layoutX="11.0" layoutY="415.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="244.0" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="-10.0">
+                  <ButtonBar buttonMinWidth="50.0" layoutX="11.0" layoutY="415.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="244.0" AnchorPane.bottomAnchor="29.0" AnchorPane.rightAnchor="-10.0">
                      <buttons>
-                        <Button minWidth="34.0" mnemonicParsing="false" onAction="#adicionar" prefHeight="26.0" text="Adicionar" />
-                        <Button fx:id="btnAceitar" minWidth="60.0" mnemonicParsing="false" onAction="#aceitar" prefHeight="26.0" prefWidth="167.0" text="Aceitar" />
+                        <Button minWidth="34.0" mnemonicParsing="false" onAction="#adicionar" prefHeight="26.0" text="Adicionar">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+                                    <Image url="@../images/cadNovo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button fx:id="btnAceitar" minWidth="60.0" mnemonicParsing="false" onAction="#aceitar" prefHeight="26.0" prefWidth="167.0" text="Aceitar">
+                           <graphic>
+                              <ImageView fitHeight="21.0" fitWidth="27.0">
+                                 <image>
+                                    <Image url="@../images/ok_image.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
                      </buttons>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -129,6 +169,11 @@
                         <Insets />
                      </opaqueInsets>
                   </ButtonBar>
+                  <ImageView fitHeight="122.0" fitWidth="135.0" layoutX="236.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <image>
+                        <Image url="@../images/logo-if.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </items>

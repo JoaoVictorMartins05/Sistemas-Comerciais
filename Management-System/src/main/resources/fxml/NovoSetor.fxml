@@ -4,23 +4,25 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="313.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovoSetorController">
+<AnchorPane id="AnchorPane" prefHeight="313.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NovoSetorController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Adicionar Setor">
+      <Label layoutX="114.0" layoutY="14.0" prefHeight="35.0" prefWidth="179.0" text="Adicionar Setor" textFill="#eb0404" AnchorPane.leftAnchor="114.0" AnchorPane.rightAnchor="124.0" AnchorPane.topAnchor="14.0">
          <font>
-            <Font size="18.0" />
+            <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <GridPane layoutX="11.0" layoutY="46.0" prefHeight="192.0" prefWidth="347.0">
+      <GridPane layoutX="11.0" layoutY="44.0" prefHeight="194.0" prefWidth="384.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="193.0" minWidth="10.0" prefWidth="109.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="331.0" minWidth="10.0" prefWidth="287.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="193.0" minWidth="10.0" prefWidth="104.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="331.0" minWidth="10.0" prefWidth="280.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -28,18 +30,41 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Nome:" />
-            <Label text="Abreviatura:" GridPane.rowIndex="1" />
-            <TextField fx:id="txtNome" GridPane.columnIndex="1" />
-            <TextField fx:id="txtAbreviatura" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Descrição:" GridPane.rowIndex="2" />
-            <TextField fx:id="txtDescricao" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Nome:">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font></Label>
+            <Label text="Abreviatura:" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font></Label>
+            <TextField fx:id="txtNome" style="-fx-background-color: #deea94;" GridPane.columnIndex="1" />
+            <TextField fx:id="txtAbreviatura" style="-fx-background-color: #deea94;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Descrição:" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font></Label>
+            <TextField fx:id="txtDescricao" style="-fx-background-color: #deea94;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <ButtonBar layoutX="124.0" layoutY="250.0" prefHeight="40.0" prefWidth="200.0">
+      <ButtonBar layoutX="160.0" layoutY="259.0" prefHeight="40.0" prefWidth="235.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="22.0">
         <buttons>
-          <Button fx:id="btnConfimar" mnemonicParsing="false" onAction="#confirmar" text="Confimar" />
-            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
+          <Button fx:id="btnConfimar" mnemonicParsing="false" onAction="#confirmar" text="Confimar">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="19.0">
+                     <image>
+                        <Image url="@../images/ok_image.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar">
+               <graphic>
+                  <ImageView>
+                     <image>
+                        <Image url="@../images/cadCancel.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
         </buttons>
       </ButtonBar>
    </children>
