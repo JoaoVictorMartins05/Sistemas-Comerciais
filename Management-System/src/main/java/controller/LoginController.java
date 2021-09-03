@@ -142,6 +142,7 @@ public class LoginController implements Initializable {
             MainController controller = loader.getController();
 
             controller.setFuncionario(funcionario);
+            controller.ifDesabilitaCampos();
 
             try {
                 controller.mostrarTela("/fxml/Venda.fxml");

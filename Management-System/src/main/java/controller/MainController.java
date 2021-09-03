@@ -116,7 +116,7 @@ public class MainController implements Initializable {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void verTransferencias() {
         try {
             this.mostrarTela("/fxml/Transferencia.fxml");
@@ -137,16 +137,16 @@ public class MainController implements Initializable {
         } else if (frame.equals("/fxml/NovaTransferencia.fxml")) {
             NovaTransferenciaController controller = loader.getController();
             controller.setFuncionarioLogado(this.getFuncionario());
-            controller.init();            
-        } else if(frame.equals("/fxml/Transferencia.fxml")) {
+            controller.init();
+        } else if (frame.equals("/fxml/Transferencia.fxml")) {
             TransferenciaController controller = loader.getController();
-            controller.setFuncionarioLogado(this.getFuncionario());   
-            controller.setPainelPrincipal(this.anchorpane);   
-            
+            controller.setFuncionarioLogado(this.getFuncionario());
+            controller.setPainelPrincipal(this.anchorpane);
+
             controller.carregarComboBox();
-        } else if(frame.equals("/fxml/Venda.fxml")) {
+        } else if (frame.equals("/fxml/Venda.fxml")) {
             VendaController controller = loader.getController();
-            controller.setFuncionarioLogado(this.getFuncionario()); 
+            controller.setFuncionarioLogado(this.getFuncionario());
             controller.init();
         }
         this.anchorpane.setCenter(a);
@@ -158,6 +158,14 @@ public class MainController implements Initializable {
         stage.setTitle("Main");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void ifDesabilitaCampos() {
+        if (funcionario.getNivelAcesso() == 1) {
+            this.menuItemCadatroFuncionario.setDisable(true);
+            this.menuItemCadatrosProduto.setDisable(true);
+            this.menuItemCadatrosSetor.setDisable(true);
+        }
     }
 
     /**
