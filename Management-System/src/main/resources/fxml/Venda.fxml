@@ -15,9 +15,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VendaController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="658.0" prefWidth="1181.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VendaController">
    <children>
-      <TableView fx:id="tblVenda" layoutY="229.0" prefHeight="346.0" prefWidth="1131.0" style="-fx-background-color: #deea94;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="229.0">
+      <TableView fx:id="tblVenda" layoutY="229.0" prefHeight="200.0" prefWidth="1181.0" style="-fx-background-color: #deea94;" AnchorPane.bottomAnchor="229.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="229.0">
          <columns>
             <TableColumn fx:id="tblColumnCodigo" prefWidth="165.0" text="Código" />
             <TableColumn fx:id="tblColumnNome" prefWidth="362.0" text="Nome" />
@@ -67,14 +67,14 @@
             <Text layoutX="26.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" />
          </children>
       </Pane>
-      <Pane layoutX="823.0" layoutY="581.0" prefHeight="105.0" prefWidth="305.0" style="-fx-background-color: #99e599;" AnchorPane.bottomAnchor="74.0" AnchorPane.rightAnchor="3.0">
+      <Pane layoutX="872.0" layoutY="454.0" prefHeight="105.0" prefWidth="305.0" style="-fx-background-color: #99e599;" AnchorPane.bottomAnchor="99.0" AnchorPane.rightAnchor="4.0">
          <children>
             <Text layoutX="4.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total R$:">
                <font>
                   <Font name="System Bold" size="33.0" />
                </font>
             </Text>
-            <Text fx:id="lblTotal" fill="#f80505" layoutX="153.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0000,00" wrappingWidth="145.0">
+            <Text fx:id="lblTotal" fill="#f80505" layoutX="172.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0000,00" wrappingWidth="145.0">
                <font>
                   <Font size="24.0" />
                </font>
@@ -86,7 +86,7 @@
             <Font name="System Italic" size="18.0" />
          </font>
       </Text>
-      <ButtonBar layoutX="566.0" layoutY="708.0" prefHeight="38.0" prefWidth="542.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="23.0">
+      <ButtonBar layoutX="629.0" layoutY="595.0" prefHeight="38.0" prefWidth="542.0" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="10.0">
          <buttons>
             <Button mnemonicParsing="false" onAction="#remover" prefHeight="45.0" prefWidth="125.0" text="EXCLUIR ITEM" textFill="#70751d">
                <graphic>
@@ -122,12 +122,12 @@
             <Image url="@../images/logo-if.png" />
          </image>
       </ImageView>
-      <Text layoutX="14.0" layoutY="599.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantidade de Itens: " AnchorPane.bottomAnchor="156.984375" AnchorPane.leftAnchor="14.0">
+      <Text layoutX="14.0" layoutY="522.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantidade de Itens: " AnchorPane.bottomAnchor="132.2265625" AnchorPane.leftAnchor="14.0">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Text fx:id="edtQtdItens" fill="#e10202" fontSmoothingType="LCD" layoutX="182.0" layoutY="598.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="25.625" AnchorPane.bottomAnchor="157.984375" AnchorPane.leftAnchor="182.0">
+      <Text fx:id="edtQtdItens" fill="#e10202" fontSmoothingType="LCD" layoutX="210.0" layoutY="524.125" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="60.625" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="210.0">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>

@@ -144,7 +144,10 @@ public class NovaTransferenciaController implements Initializable {
         setEmf(Persistence.createEntityManagerFactory("venda"));
         setEm(getEmf().createEntityManager());
 
-        String query = "SELECT DISTINCT material.id, nome, descricao, unidadeMedida, valor FROM material INNER JOIN `Estoque` WHERE idSetor = " + this.getFuncionarioLogado().getSetor().getId();
+        String query = "SELECT DISTINCT material.id, nome, descricao, unidadeMedida, valor, existe "
+                + "FROM material INNER JOIN `Estoque`on material.id = `Estoque`.idMaterial "
+                + "WHERE material.existe = 1 AND idSetor = "
+                + this.getFuncionarioLogado().getSetor().getId();
 
         getEm().getTransaction().begin();
         Query consulta = getEm().createNativeQuery(query, Material.class);
@@ -263,34 +266,46 @@ public class NovaTransferenciaController implements Initializable {
         return estoques.get(0);
     }
 
+    private boolean verificaEstoque(ItemTransferencia item) {
+        if (item.getEstoque().getQuantidade() >= item.getQuantidade()) {
+            return true;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Este setor não possui esta quantidade em estoque de "
+                    + item.getEstoque().getMaterial().getNome());
+            alert.show();
+        }
+        return false;
+    }
+
     @FXML
     public void adicionar(ActionEvent event) {
         ItemTransferencia item = new ItemTransferencia();
 
         if (this.validaCampos()) {
             Material material = this.getEdtMaterial().getSelectionModel().getSelectedItem();
+            double quantidade = Double.parseDouble(this.getEdtQuantidade().getText());
 
             item.setEstoque(this.buscarEstoque(material));
-            item.setQuantidade(Double.parseDouble(this.getEdtQuantidade().getText()));
+            item.setQuantidade(quantidade);
 
-            if (!this.jaExisteItem(item)) {
-                this.getItens().add(item);
-                for(ItemTransferencia i : this.getItens()) {
-                    System.out.println(i.getEstoque().getMaterial().getNome());
-                }
+            if (this.verificaEstoque(item)) {
+                if (!this.jaExisteItem(item)) {
+                    this.getItens().add(item);
+                }            
+                Carrinho carrinho = this.preencheCarrinho(material, item);
+                this.adicionaMaterialNoCarrinho(carrinho);
+                this.atualizarTabela();    
             }
-
-            Carrinho carrinho = this.preencheCarrinho(material, item);
-
-            this.adicionaMaterialNoCarrinho(carrinho);
         }
-        this.atualizarTabela();
     }
 
     private boolean jaExisteItem(ItemTransferencia item) {
         for (ItemTransferencia i : this.getItens()) {
             if (i.getEstoque().getId().equals(item.getEstoque().getId())) {
-                i.setQuantidade(i.getQuantidade() + item.getQuantidade());
+                item.setQuantidade(i.getQuantidade() + item.getQuantidade());
+                if (this.verificaEstoque(item)) {
+                    i.setQuantidade(item.getQuantidade());
+                }
                 return true;
             }
         }
@@ -309,7 +324,7 @@ public class NovaTransferenciaController implements Initializable {
     private void adicionaMaterialNoCarrinho(Carrinho carrinho) {
         for (Carrinho c : this.getCarrinhos()) {
             if (c.getCodigoMaterial().equals(carrinho.getCodigoMaterial())) {
-                carrinho.setQuantidade(c.getQuantidade() + carrinho.getQuantidade());
+                carrinho.setQuantidade(carrinho.getQuantidade());
                 this.getCarrinhos().remove(c);
                 break;
             }
@@ -323,8 +338,8 @@ public class NovaTransferenciaController implements Initializable {
         this.getColunaQuantidade().setCellValueFactory(new PropertyValueFactory<Carrinho, String>("quantidade"));
 
         ObservableList obsCarrinhos = FXCollections.observableArrayList(this.getCarrinhos());
-        
-        this.getTblCarrinho().setItems(this.getCarrinhos().isEmpty() ? null : obsCarrinhos);       
+
+        this.getTblCarrinho().setItems(this.getCarrinhos().isEmpty() ? null : obsCarrinhos);
     }
 
     @FXML
@@ -342,14 +357,15 @@ public class NovaTransferenciaController implements Initializable {
 
         setEmf(Persistence.createEntityManagerFactory("venda"));
         setEm(getEmf().createEntityManager());
-        
+
         em.getTransaction().begin();
         em.merge(this.transferencia);
 
         em.getTransaction().commit();
 
         em.getTransaction().begin();
-        Query consulta = em.createNativeQuery("Select * from transferencia where data = (Select max(data) from transferencia)", Transferencia.class);
+        Query consulta = em.createNativeQuery("Select * from transferencia where data = (Select max(data) from transferencia)", Transferencia.class
+        );
         this.transferencia = (Transferencia) consulta.getResultList().get(0);
 
         em.getTransaction().commit();
@@ -369,10 +385,10 @@ public class NovaTransferenciaController implements Initializable {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Transferencia Realizada Com Sucesso");
         alert.show();
-        
+
         this.limparTransferencia();
     }
-    
+
     private void limparTransferencia() {
         this.transferencia = new Transferencia();
         this.materiais = new ArrayList<>();
@@ -391,7 +407,7 @@ public class NovaTransferenciaController implements Initializable {
 
         if (carrinho != null) {
             for (ItemTransferencia item : this.getItens()) {
-                if(item.getEstoque().getMaterial().getId().equals(carrinho.getCodigoMaterial())) {
+                if (item.getEstoque().getMaterial().getId().equals(carrinho.getCodigoMaterial())) {
                     this.getItens().remove(item);
                     break;
                 }

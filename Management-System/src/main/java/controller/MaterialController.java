@@ -143,7 +143,12 @@ public class MaterialController implements Initializable {
             if (alert.getResult().getText().equals("OK")) {
                 emf = Persistence.createEntityManagerFactory("venda");
                 em = emf.createEntityManager();
-                em.remove(em.find(Material.class, material.getId()));
+                
+                material.setExiste(false);
+                
+                em.getTransaction().begin();
+                em.merge(material);
+                em.getTransaction().commit();
                 emf.close();
                 this.atualizarTabela(this.listar());
                 this.tblMaterial.getSelectionModel().selectFirst();
@@ -193,7 +198,7 @@ public class MaterialController implements Initializable {
         emf = Persistence.createEntityManagerFactory("venda");
         em = emf.createEntityManager();
         em.getTransaction().begin();
-        Query consulta = em.createQuery("Select material from Material material");
+        Query consulta = em.createQuery("Select material from Material material where material.existe = 1");
         List<Material> materiais = consulta.getResultList();
 
         em.getTransaction().commit();

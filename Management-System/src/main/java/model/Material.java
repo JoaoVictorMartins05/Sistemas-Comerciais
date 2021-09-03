@@ -35,6 +35,9 @@ public class Material {
     
     @Column(nullable = false)
     private double valor;
+    
+    @Column(nullable = false)
+    private boolean existe;
 
     public Material() {
         this.id = -1L;
@@ -42,16 +45,17 @@ public class Material {
         this.descricao = "";
         this.unidadeMedida = "";
         this.valor = 0.0;
+        this.existe = true;
     }
     
-    public Material(Long id, String nome, String descricao, String unidadeMedida, double valor) {
+    public Material(Long id, String nome, String descricao, String unidadeMedida, double valor, boolean existe) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.unidadeMedida = unidadeMedida;
         this.valor = valor;
+        this.existe = existe;
     }
-
 
     /**
      * @return the id
@@ -121,5 +125,19 @@ public class Material {
      */
     public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    /**
+     * @return the existe
+     */
+    public boolean isExiste() {
+        return existe;
+    }
+
+    /**
+     * @param existe the existe to set
+     */
+    public void setExiste(boolean existe) {
+        this.existe = existe;
     }
 }
